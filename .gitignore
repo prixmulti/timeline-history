@@ -1,0 +1,8 @@
+node_modules/
+dist/
+build/
+.DS_Store
+*.log
+# Keep built WP assets for zip install; regenerate via npm run build
+# wordpress-plugin/timeline-history/assets/dist/
+wordpress-plugin/timeline-history/blocks/timeline/build/

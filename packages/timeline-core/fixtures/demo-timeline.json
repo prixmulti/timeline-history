@@ -1,0 +1,20 @@
+{
+  "config": {
+    "layout": "vertical",
+    "theme": "editorial",
+    "skin": "light",
+    "animation": "fade-in",
+    "showMedia": true,
+    "dateFormat": "MMM d, yyyy",
+    "categorySlugs": [],
+    "maxStories": 0,
+    "lineStyle": "solid",
+    "tokens": {
+      "colors": {
+        "line": "#2d4a3e",
+        "accent": "#b85c38"
+      }
+    }
+  },
+  "stories": []
+}

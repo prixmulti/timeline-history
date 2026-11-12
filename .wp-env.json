@@ -1,0 +1,9 @@
+{
+  "core": "WordPress/WordPress",
+  "phpVersion": "8.2",
+  "plugins": ["./wordpress-plugin/timeline-history"],
+  "config": {
+    "WP_DEBUG": true,
+    "SCRIPT_DEBUG": true
+  }
+}

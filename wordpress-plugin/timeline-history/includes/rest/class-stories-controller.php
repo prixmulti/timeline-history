@@ -123,6 +123,9 @@ class Timeline_History_Stories_Controller {
 
 	public function list_stories( WP_REST_Request $request ): WP_REST_Response {
 		$timeline = sanitize_text_field( (string) $request->get_param( 'timeline' ) );
+		$config   = $timeline !== ''
+			? Timeline_History_Sets::config_for_timeline( $timeline )
+			: Timeline_History_Settings::to_config();
 		return new WP_REST_Response(
 			array(
 				'stories'   => Timeline_History_Story_Repository::get_stories(
@@ -131,7 +134,7 @@ class Timeline_History_Stories_Controller {
 					)
 				),
 				'timelines' => Timeline_History_Sets::list_all(),
-				'config'    => Timeline_History_Settings::to_config(),
+				'config'    => $config,
 			),
 			200
 		);
@@ -164,9 +167,27 @@ class Timeline_History_Stories_Controller {
 		return new WP_REST_Response( array( 'deleted' => true ), 200 );
 	}
 
-	public function save_settings( WP_REST_Request $request ): WP_REST_Response {
-		$body   = $request->get_json_params();
-		$config = isset( $body['config'] ) && is_array( $body['config'] ) ? $body['config'] : array();
+	public function save_settings( WP_REST_Request $request ) {
+		$body     = $request->get_json_params();
+		$timeline = isset( $body['timeline'] ) ? sanitize_text_field( (string) $body['timeline'] ) : '';
+		$config   = isset( $body['config'] ) && is_array( $body['config'] ) ? $body['config'] : array();
+
+		if ( $timeline === '' ) {
+			return new WP_Error(
+				'th_timeline_required',
+				__( 'Vælg en tidslinje før visning gemmes.', 'timeline-history' ),
+				array( 'status' => 400 )
+			);
+		}
+
+		$set = Timeline_History_Sets::resolve( $timeline );
+		if ( ! $set ) {
+			return new WP_Error(
+				'th_timeline_unknown',
+				__( 'Ukendt tidslinje.', 'timeline-history' ),
+				array( 'status' => 404 )
+			);
+		}
 
 		$mapped = array(
 			'layout'      => $config['layout'] ?? '',
@@ -188,11 +209,11 @@ class Timeline_History_Stories_Controller {
 			$sanitized['tokens'] = $this->sanitize_tokens( $mapped['tokens'] );
 		}
 
-		update_option( Timeline_History_Settings::OPTION_KEY, $sanitized );
+		Timeline_History_Sets::save_display_settings( (int) $set['id'], $sanitized );
 
 		return new WP_REST_Response(
 			array(
-				'config' => Timeline_History_Settings::to_config(),
+				'config' => Timeline_History_Sets::config_for_timeline( (string) $set['slug'] ),
 			),
 			200
 		);

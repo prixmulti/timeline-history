@@ -121,6 +121,10 @@ export function AdminStudio({
 
   const persistConfig = useCallback(
     (next: TimelineConfig) => {
+      if (!timelineSlug) {
+        setError('Vælg en tidslinje før visning gemmes.');
+        return;
+      }
       if (saveTimer.current) clearTimeout(saveTimer.current);
       saveTimer.current = setTimeout(async () => {
         try {
@@ -129,17 +133,17 @@ export function AdminStudio({
             '/settings',
             {
               method: 'POST',
-              body: JSON.stringify({ config: next }),
+              body: JSON.stringify({ config: next, timeline: timelineSlug }),
             }
           );
           setConfig(data.config);
-          flash('Visning gemt');
+          flash('Visning gemt for tidslinjen');
         } catch (err) {
           setError(err instanceof Error ? err.message : String(err));
         }
       }, 450);
     },
-    [api]
+    [api, timelineSlug]
   );
 
   useEffect(() => {

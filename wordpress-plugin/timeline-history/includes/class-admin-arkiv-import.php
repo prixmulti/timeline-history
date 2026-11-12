@@ -70,7 +70,7 @@ class Timeline_History_Admin_Arkiv_Import {
 
 		if ( $url === '' ) {
 			wp_send_json_error(
-				array( 'message' => __( 'Vælg et lokalarkiv, eller indsæt et søgelink fra arkiv.dk under avanceret.', 'timeline-history' ) )
+				array( 'message' => __( 'Vælg et lokalarkiv før du fortsætter.', 'timeline-history' ) )
 			);
 		}
 
@@ -381,21 +381,13 @@ class Timeline_History_Admin_Arkiv_Import {
 			true
 		);
 		$url_posted = isset( $_POST['th_arkiv_url'] ) ? $this->sanitize_arkiv_url( (string) $_POST['th_arkiv_url'] ) : '';
-		$url_manual = isset( $_POST['th_arkiv_url_manual'] ) && '1' === $_POST['th_arkiv_url_manual'];
 
 		if ( $archive_id > 0 ) {
 			$url = $composed_url;
-		} elseif ( $url_manual && $url_posted !== '' ) {
-			$url    = $url_posted;
-			$parsed = Timeline_History_Arkiv_Client::parse_search_url_parts( $url );
-			if ( $parsed['archive_id'] > 0 ) {
-				$archive_id = $parsed['archive_id'];
-			}
-			if ( $parsed['searchstring'] !== '' ) {
-				$search_string = $parsed['searchstring'];
-			}
+		} elseif ( $url_posted !== '' ) {
+			$url = $url_posted;
 		} else {
-			$url = $url_posted !== '' ? $url_posted : $composed_url;
+			$url = $composed_url;
 		}
 
 		return array(
@@ -493,7 +485,6 @@ class Timeline_History_Admin_Arkiv_Import {
 		$archive_id    = 0;
 		$archive_label = '';
 		$search_string = '';
-		$url_manual    = false;
 		$result        = null;
 		$import        = null;
 		$error         = '';
@@ -546,7 +537,6 @@ class Timeline_History_Admin_Arkiv_Import {
 			$archive_id    = $resolved['archive_id'];
 			$search_string = $resolved['search_string'];
 			$archive_label = $resolved['archive_label'];
-			$url_manual    = isset( $_POST['th_arkiv_url_manual'] ) && '1' === $_POST['th_arkiv_url_manual'];
 			$from          = isset( $_POST['th_arkiv_from'] ) ? sanitize_text_field( wp_unslash( $_POST['th_arkiv_from'] ) ) : '';
 			$to            = isset( $_POST['th_arkiv_to'] ) ? sanitize_text_field( wp_unslash( $_POST['th_arkiv_to'] ) ) : '';
 			$timeline_name = isset( $_POST['th_arkiv_timeline'] ) ? sanitize_text_field( wp_unslash( $_POST['th_arkiv_timeline'] ) ) : '';
@@ -558,7 +548,6 @@ class Timeline_History_Admin_Arkiv_Import {
 			$archive_id    = $resolved['archive_id'];
 			$search_string = $resolved['search_string'];
 			$archive_label = $resolved['archive_label'];
-			$url_manual    = isset( $_POST['th_arkiv_url_manual'] ) && '1' === $_POST['th_arkiv_url_manual'];
 			$from          = isset( $_POST['th_arkiv_from'] ) ? sanitize_text_field( wp_unslash( $_POST['th_arkiv_from'] ) ) : '';
 			$to            = isset( $_POST['th_arkiv_to'] ) ? sanitize_text_field( wp_unslash( $_POST['th_arkiv_to'] ) ) : '';
 			$timeline_name = isset( $_POST['th_arkiv_timeline'] ) ? sanitize_text_field( wp_unslash( $_POST['th_arkiv_timeline'] ) ) : '';
@@ -568,7 +557,7 @@ class Timeline_History_Admin_Arkiv_Import {
 
 			if ( 'preview' === $action ) {
 				if ( $url === '' ) {
-					$error = __( 'Vælg et lokalarkiv (søg efter navn), eller indsæt et søgelink fra arkiv.dk under avanceret.', 'timeline-history' );
+					$error = __( 'Vælg et lokalarkiv (søg efter navn) før du henter forhåndsvisning.', 'timeline-history' );
 					delete_transient( $this->preview_key() );
 					$result = null;
 				} else {
@@ -817,8 +806,6 @@ class Timeline_History_Admin_Arkiv_Import {
 						<input type="hidden" name="th_arkiv_action" id="th_arkiv_action_field" value="" />
 						<input type="hidden" name="th_arkiv_archive" id="th_arkiv_archive" value="<?php echo $archive_id > 0 ? (int) $archive_id : ''; ?>" />
 						<input type="hidden" name="th_arkiv_archive_label" id="th_arkiv_archive_label" value="<?php echo esc_attr( $archive_label ); ?>" />
-						<input type="hidden" name="th_arkiv_url_manual" id="th_arkiv_url_manual" value="<?php echo $url_manual ? '1' : '0'; ?>" />
-
 						<div class="th-studio__card">
 							<div class="th-studio__card-head">
 								<h2><?php esc_html_e( 'Søgning', 'timeline-history' ); ?></h2>
@@ -850,9 +837,6 @@ class Timeline_History_Admin_Arkiv_Import {
 								<input type="url" name="th_arkiv_url" id="th_arkiv_url" readonly
 									value="<?php echo esc_attr( $url ); ?>"
 									placeholder="<?php esc_attr_e( 'Vises når du har valgt lokalarkiv', 'timeline-history' ); ?>" />
-								<p class="th-sf-field__hint">
-									<button type="button" class="th-link-btn" id="th_arkiv_url_toggle" style="margin:0;"><?php esc_html_e( 'Rediger link manuelt', 'timeline-history' ); ?></button>
-								</p>
 							</div>
 
 							<div class="th-sf-field">
@@ -1036,13 +1020,9 @@ class Timeline_History_Admin_Arkiv_Import {
 								if (action === 'import' || action === 'preview') {
 									ev.preventDefault();
 									var archiveId = document.getElementById('th_arkiv_archive');
-									var urlEl = document.getElementById('th_arkiv_url');
-									var manual = document.getElementById('th_arkiv_url_manual');
 									var hasArchive = archiveId && archiveId.value;
-									var hasUrl = urlEl && urlEl.value;
-									var manualMode = manual && manual.value === '1';
-									if (!hasUrl || (!hasArchive && !manualMode)) {
-										window.alert('<?php echo esc_js( __( 'Vælg et lokalarkiv, eller rediger søgelinket manuelt.', 'timeline-history' ) ); ?>');
+									if (!hasArchive) {
+										window.alert('<?php echo esc_js( __( 'Vælg et lokalarkiv før du fortsætter.', 'timeline-history' ) ); ?>');
 										return;
 									}
 									if (action === 'import') {
@@ -1079,8 +1059,6 @@ class Timeline_History_Admin_Arkiv_Import {
 						var archiveLabelEl = document.getElementById('th_arkiv_archive_label');
 						var searchEl = document.getElementById('th_arkiv_search');
 						var urlEl = document.getElementById('th_arkiv_url');
-						var urlManualEl = document.getElementById('th_arkiv_url_manual');
-						var urlToggle = document.getElementById('th_arkiv_url_toggle');
 						var archiveQuery = document.getElementById('th_arkiv_archive_query');
 						var archiveResults = document.getElementById('th_arkiv_archive_results');
 						var archiveSelected = document.getElementById('th_arkiv_archive_selected');
@@ -1090,28 +1068,8 @@ class Timeline_History_Admin_Arkiv_Import {
 						var searchTimer = null;
 
 						function syncUrlBeforeSubmit() {
-							if (!urlEl || isUrlManual()) return;
+							if (!urlEl) return;
 							urlEl.value = buildUrl();
-						}
-
-						function isUrlManual() {
-							return urlManualEl && urlManualEl.value === '1';
-						}
-
-						function setUrlManual(on) {
-							if (urlManualEl) urlManualEl.value = on ? '1' : '0';
-							if (urlEl) {
-								urlEl.readOnly = !on;
-							}
-							if (urlToggle) {
-								urlToggle.textContent = on
-									? '<?php echo esc_js( __( 'Brug lokalarkiv i stedet', 'timeline-history' ) ); ?>'
-									: '<?php echo esc_js( __( 'Rediger link manuelt', 'timeline-history' ) ); ?>';
-							}
-						}
-
-						if (urlManualEl && urlManualEl.value === '1') {
-							setUrlManual(true);
 						}
 
 						function buildUrl() {
@@ -1129,7 +1087,7 @@ class Timeline_History_Admin_Arkiv_Import {
 						}
 
 						function syncUrl() {
-							if (!urlEl || isUrlManual()) return;
+							if (!urlEl) return;
 							urlEl.value = buildUrl();
 							maybeInvalidatePreview();
 						}
@@ -1145,7 +1103,6 @@ class Timeline_History_Admin_Arkiv_Import {
 								archiveResults.innerHTML = '';
 							}
 							if (archiveQuery) archiveQuery.value = '';
-							setUrlManual(false);
 							syncUrl();
 						}
 
@@ -1155,30 +1112,15 @@ class Timeline_History_Admin_Arkiv_Import {
 								if (archiveLabelEl) archiveLabelEl.value = '';
 								if (archiveSelected) archiveSelected.hidden = true;
 								if (archiveSearchWrap) archiveSearchWrap.hidden = false;
-								if (urlEl && !isUrlManual()) urlEl.value = '';
+								if (urlEl) urlEl.value = '';
 								invalidatePreview();
-								maybeInvalidatePreview();
-							});
-						}
-
-						if (urlToggle) {
-							urlToggle.addEventListener('click', function () {
-								setUrlManual(!isUrlManual());
-								if (!isUrlManual()) syncUrl();
 								maybeInvalidatePreview();
 							});
 						}
 
 						if (searchEl) {
 							searchEl.addEventListener('input', function () {
-								if (!isUrlManual()) syncUrl();
-								else maybeInvalidatePreview();
-							});
-						}
-
-						if (urlEl) {
-							urlEl.addEventListener('input', function () {
-								maybeInvalidatePreview();
+								syncUrl();
 							});
 						}
 

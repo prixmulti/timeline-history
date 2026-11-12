@@ -19,15 +19,17 @@ if ( ! empty( $attributes['limit'] ) ) {
 	$overrides['max_stories'] = (int) $attributes['limit'];
 }
 
-$config = Timeline_History_Settings::to_config( $overrides );
+$timeline = ! empty( $attributes['timeline'] ) ? sanitize_text_field( $attributes['timeline'] ) : '';
+
+$config = $timeline !== ''
+	? Timeline_History_Sets::config_for_timeline( $timeline, $overrides )
+	: Timeline_History_Settings::to_config( $overrides );
 
 $categories = array();
 if ( ! empty( $attributes['category'] ) ) {
 	$categories              = array_map( 'trim', explode( ',', $attributes['category'] ) );
 	$config['categorySlugs'] = $categories;
 }
-
-$timeline = ! empty( $attributes['timeline'] ) ? sanitize_text_field( $attributes['timeline'] ) : '';
 
 $stories = Timeline_History_Story_Repository::get_stories(
 	array(

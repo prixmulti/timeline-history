@@ -47,15 +47,17 @@ class Timeline_History_Shortcode {
 			$overrides['max_stories'] = (int) $atts['limit'];
 		}
 
-		$config = Timeline_History_Settings::to_config( $overrides );
+		$timeline = sanitize_text_field( (string) $atts['timeline'] );
+
+		$config = $timeline !== ''
+			? Timeline_History_Sets::config_for_timeline( $timeline, $overrides )
+			: Timeline_History_Settings::to_config( $overrides );
 
 		$categories = array();
 		if ( ! empty( $atts['category'] ) ) {
 			$categories              = array_map( 'trim', explode( ',', $atts['category'] ) );
 			$config['categorySlugs'] = $categories;
 		}
-
-		$timeline = sanitize_text_field( (string) $atts['timeline'] );
 
 		$stories = Timeline_History_Story_Repository::get_stories(
 			array(

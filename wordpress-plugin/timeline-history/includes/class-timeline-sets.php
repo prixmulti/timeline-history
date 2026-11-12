@@ -11,7 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Timeline_History_Sets {
 
-	public const TAXONOMY = 'timeline_set';
+	public const TAXONOMY       = 'timeline_set';
+	public const META_DISPLAY   = '_th_timeline_display';
 
 	public static function boot(): void {
 		add_action( 'delete_' . self::TAXONOMY, array( __CLASS__, 'on_term_deleted' ), 10, 4 );
@@ -142,6 +143,44 @@ class Timeline_History_Sets {
 			$out[]           = $mapped;
 		}
 		return $out;
+	}
+
+	/**
+	 * Stored display settings for one timeline (PHP option shape).
+	 *
+	 * @return array<string, mixed>
+	 */
+	public static function get_display_settings( string $slug ): array {
+		$set = self::resolve( $slug );
+		if ( ! $set ) {
+			return Timeline_History_Settings::defaults();
+		}
+		$stored = get_term_meta( (int) $set['id'], self::META_DISPLAY, true );
+		if ( is_array( $stored ) && ! empty( $stored ) ) {
+			return wp_parse_args( $stored, Timeline_History_Settings::defaults() );
+		}
+		// Existing timelines without saved meta: keep current global look once.
+		return Timeline_History_Settings::get();
+	}
+
+	/**
+	 * @param array<string, mixed> $sanitized Timeline_History_Settings::sanitize() output.
+	 */
+	public static function save_display_settings( int $term_id, array $sanitized ): void {
+		if ( $term_id <= 0 ) {
+			return;
+		}
+		update_term_meta( $term_id, self::META_DISPLAY, $sanitized );
+	}
+
+	/**
+	 * Frontend / Studio config for a named timeline.
+	 *
+	 * @param array<string, mixed> $overrides Shortcode/block overrides (layout, theme, …).
+	 */
+	public static function config_for_timeline( string $slug, array $overrides = array() ): array {
+		$php = wp_parse_args( $overrides, self::get_display_settings( $slug ) );
+		return Timeline_History_Settings::to_config( $php );
 	}
 
 	public static function assign( int $post_id, string $slug_or_name ): bool {

@@ -39,8 +39,10 @@ class Timeline_History_Preview_Controller {
 	}
 
 	public function get_preview( WP_REST_Request $request ): WP_REST_Response {
-		$config   = Timeline_History_Settings::to_config();
 		$timeline = sanitize_text_field( (string) $request->get_param( 'timeline' ) );
+		$config   = $timeline !== ''
+			? Timeline_History_Sets::config_for_timeline( $timeline )
+			: Timeline_History_Settings::to_config();
 		$stories  = Timeline_History_Story_Repository::get_stories(
 			array(
 				'category_slugs' => $config['categorySlugs'],

@@ -81,8 +81,6 @@ packages/timeline-builder/  # Studio (admin)
 wordpress-plugin/timeline-history/  # ArkivTimeline (PHP, blok, dist)
 ```
 
-Mappen `cool-timeline-pro/` er kun legacy-reference og er ikke en del af produktet.
-
 ## Links
 
 - **Kildekode:** https://github.com/prixmulti/timeline-history  

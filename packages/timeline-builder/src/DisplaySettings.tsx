@@ -122,12 +122,15 @@ export function DisplaySettings({
 
   const applyPalette = (colors: PaletteColors) => {
     patch({
+      themeAdapt: 'off',
       tokens: {
         ...config.tokens,
         colors: { ...colors },
       },
     });
   };
+
+  const themeAdaptOn = config.themeAdapt !== 'off';
 
   return (
     <div
@@ -136,6 +139,24 @@ export function DisplaySettings({
         (compact ? ' th-display--compact' : '')
       }
     >
+      <section className="th-display__section th-display__section--adapt">
+        <label className="th-theme-adapt">
+          <input
+            type="checkbox"
+            checked={themeAdaptOn}
+            onChange={(e) =>
+              patch({ themeAdapt: e.target.checked ? 'auto' : 'off' })
+            }
+          />
+          <span>Følg WordPress-tema på siderne</span>
+        </label>
+        <p className="th-theme-adapt__hint">
+          {themeAdaptOn
+            ? 'Farver hentes fra det aktive tema. Enkelte farver nedenfor overskriver automatisk tilpasning.'
+            : 'Farverne nedenfor bruges uændret på alle sider.'}
+        </p>
+      </section>
+
       <section className="th-display__section">
         <h2>Tema</h2>
         <div

@@ -1,0 +1,10 @@
+{
+  "name": "timeline-history-wp-assets",
+  "private": true,
+  "scripts": {
+    "build": "wp-scripts build --webpack-copy-php"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^30.7.0"
+  }
+}

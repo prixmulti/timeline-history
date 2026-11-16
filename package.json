@@ -4,17 +4,21 @@
   "workspaces": [
     "packages/*",
     "apps/*",
-    "wordpress-plugin/timeline-history/blocks/timeline"
+    "wordpress-plugin/timeline-history/blocks/timeline",
+    "wordpress-plugin/timeline-history/assets"
   ],
   "scripts": {
     "dev": "npm run dev -w @timeline-history/playground",
     "build": "npm run build -w @timeline-history/timeline-core && npm run build -w @timeline-history/timeline-builder && npm run build:plugin",
-    "build:plugin": "node scripts/copy-assets.mjs && npm run build -w timeline-history-block",
+    "build:plugin": "npm run build -w timeline-history-wp-assets && node scripts/copy-assets.mjs && npm run build -w timeline-history-block",
     "pack:plugin": "node scripts/pack-plugin.mjs",
+    "export:guide": "node scripts/export-brugerguide-docx.mjs && node scripts/export-brugerguide-idml.mjs",
     "wp:start": "wp-env start",
     "wp:stop": "wp-env stop"
   },
   "devDependencies": {
-    "@wordpress/env": "^10.20.0"
+    "@wordpress/env": "^10.20.0",
+    "docx": "^9.15.3",
+    "jszip": "^3.10.2"
   }
 }

@@ -1,16 +1,78 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;1,9..40,400&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,700;1,6..72,400&family=Outfit:wght@400;500;600&family=Playfair+Display:wght@500;700&family=Source+Sans+3:wght@400;600&display=swap');
 
-/* Full-bleed ud af WP constrained content (Twenty Twenty-Five m.fl.) */
+/*
+ * Bredde: standard fylder forælderen; alignwide bryder forsigtigt ud af smalle
+ * tema-containere uden det gamle 100vw-hack (som klippede layout).
+ */
 .th-embed {
+  --th-embed-max: 1400px;
   position: relative;
-  width: 100vw;
-  max-width: 100vw !important;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  width: 100%;
+  max-width: var(--th-embed-max);
+  margin-inline: auto;
+  box-sizing: border-box;
+  clear: both;
+  overflow-x: visible;
+  container-type: inline-size;
+  container-name: th-embed;
+}
+
+.th-embed.alignwide {
+  width: min(var(--th-embed-max), calc(100vw - 1.5rem));
+  max-width: min(var(--th-embed-max), calc(100vw - 1.5rem));
+  margin-inline: calc(50% - min(calc(var(--th-embed-max) / 2), calc(50vw - 0.75rem)));
+}
+
+/* Block-temaer (constrained layout) */
+:root :where(.is-layout-constrained) > .th-embed.alignwide,
+:root :where(.is-layout-flow) > .th-embed.alignwide {
+  max-width: var(--wp--style--global--wide-size, var(--th-embed-max));
+  width: 100%;
+}
+
+:root :where(.is-layout-constrained) > .th-embed.alignfull,
+:root :where(.is-layout-flow) > .th-embed.alignfull {
+  max-width: none;
+  width: 100%;
+  margin-inline: 0;
+}
+
+.th-embed.alignfull {
+  width: min(var(--th-embed-max), calc(100vw - 1rem));
+  max-width: min(var(--th-embed-max), calc(100vw - 1rem));
+  margin-inline: calc(50% - min(calc(var(--th-embed-max) / 2), calc(50vw - 0.5rem)));
+}
+
+.th-embed,
+.th-embed * ,
+.th-embed *::before,
+.th-embed *::after {
   box-sizing: border-box;
 }
 
+.th-embed :where(ol.th-track, ul.th-track) {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.th-embed :where(li.th-story) {
+  display: grid !important;
+  list-style: none !important;
+  margin: 0 !important;
+  float: none !important;
+  min-width: 0;
+}
+
+.th-embed :where(img, video, iframe) {
+  max-width: 100%;
+  height: auto;
+}
+
 .th-root {
+  isolation: isolate;
+  width: 100%;
+  min-width: 0;
   --th-line-width: 2px;
   --th-axis-size: 2.5rem;
   --th-axis-gap: clamp(1.25rem, 2vw, 1.75rem);
@@ -105,6 +167,7 @@
 .th-track--vertical .th-story {
   --th-axis-offset: 1.25rem;
   display: grid;
+  min-width: 0;
   /* Vekslende kort: venstre | midterlinje | højre – hver side fylder sin halvdel */
   grid-template-columns: minmax(0, 1fr) var(--th-axis-size) minmax(0, 1fr);
   align-items: start;
@@ -877,6 +940,59 @@
   }
   .th-story__card:hover {
     transform: none;
+  }
+}
+
+/* Smal embed (typisk smal tema-kolonne) – enkelkolonne uanset viewport */
+@container th-embed (max-width: 920px) {
+  .th-root {
+    --th-axis-size: 1.75rem;
+    --th-axis-gap: 0.15rem;
+    --th-year-col: 2.1rem;
+    padding-left: 0.1rem;
+    padding-right: 0.4rem;
+  }
+
+  .th-root--vertical .th-rail {
+    left: calc(
+      0.1rem + var(--th-year-col) + var(--th-axis-gap) + var(--th-axis-size) / 2
+    );
+    transform: translateX(-50%);
+  }
+
+  .th-track--vertical .th-story {
+    grid-template-columns: var(--th-year-col) var(--th-axis-size) minmax(0, 1fr);
+    column-gap: 0.15rem;
+    --th-axis-offset: 0.75rem;
+    --th-card-inset: 0.35rem;
+  }
+
+  .th-track--vertical .th-story__marker-wrap {
+    grid-column: 2;
+  }
+
+  .th-track--vertical .th-story--left .th-story__card,
+  .th-track--vertical .th-story--right .th-story__card {
+    grid-column: 3;
+    justify-self: stretch;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .th-track--vertical .th-story__year--left,
+  .th-track--vertical .th-story__year--right {
+    grid-column: 1;
+    justify-self: end;
+    text-align: right;
+    padding-right: 0.15rem;
+    padding-left: 0;
+    font-size: 0.78rem;
+    letter-spacing: -0.03em;
+  }
+
+  .th-track--vertical .th-story__dot {
+    width: 10px;
+    height: 10px;
   }
 }
 

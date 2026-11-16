@@ -17,22 +17,22 @@ function Edit({ attributes, setAttributes }) {
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title={__('Timeline settings', 'timeline-history')}>
+				<PanelBody title={__('Timeline settings', 'arkivtimeline')}>
 					<SelectControl
-						label={__('Layout', 'timeline-history')}
+						label={__('Layout', 'arkivtimeline')}
 						value={attributes.layout}
 						options={[
-							{ label: __('Site default', 'timeline-history'), value: '' },
-							{ label: __('Vertical', 'timeline-history'), value: 'vertical' },
-							{ label: __('Horizontal', 'timeline-history'), value: 'horizontal' },
+							{ label: __('Site default', 'arkivtimeline'), value: '' },
+							{ label: __('Vertical', 'arkivtimeline'), value: 'vertical' },
+							{ label: __('Horizontal', 'arkivtimeline'), value: 'horizontal' },
 						]}
 						onChange={(layout) => setAttributes({ layout })}
 					/>
 					<SelectControl
-						label={__('Theme', 'timeline-history')}
+						label={__('Theme', 'arkivtimeline')}
 						value={attributes.theme}
 						options={[
-							{ label: __('Site default', 'timeline-history'), value: '' },
+							{ label: __('Site default', 'arkivtimeline'), value: '' },
 							{ label: 'minimal', value: 'minimal' },
 							{ label: 'card', value: 'card' },
 							{ label: 'editorial', value: 'editorial' },
@@ -40,13 +40,13 @@ function Edit({ attributes, setAttributes }) {
 						onChange={(theme) => setAttributes({ theme })}
 					/>
 					<TextControl
-						label={__('Tidslinje (slug)', 'timeline-history')}
-						help={__('Fx. ansager-1940 – tom = alle historier', 'timeline-history')}
+						label={__('Tidslinje (slug)', 'arkivtimeline')}
+						help={__('Fx. ansager-1940 – tom = alle historier', 'arkivtimeline')}
 						value={attributes.timeline}
 						onChange={(timeline) => setAttributes({ timeline })}
 					/>
 					<TextControl
-						label={__('Categories (slugs, comma-separated)', 'timeline-history')}
+						label={__('Categories (slugs, comma-separated)', 'arkivtimeline')}
 						value={attributes.category}
 						onChange={(category) => setAttributes({ category })}
 					/>
@@ -54,12 +54,12 @@ function Edit({ attributes, setAttributes }) {
 			</InspectorControls>
 			<div {...blockProps}>
 				<p>
-					<strong>{__('ArkivTimeline', 'timeline-history')}</strong>
+					<strong>{__('ArkivTimeline', 'arkivtimeline')}</strong>
 				</p>
 				<p>
 					{attributes.timeline
-						? `${__('Tidslinje:', 'timeline-history')} ${attributes.timeline}`
-						: __('Viser alle historier (vælg tidslinje-slug i sidebaren).', 'timeline-history')}
+						? `${__('Tidslinje:', 'arkivtimeline')} ${attributes.timeline}`
+						: __('Viser alle historier (vælg tidslinje-slug i sidebaren).', 'arkivtimeline')}
 				</p>
 			</div>
 		</>

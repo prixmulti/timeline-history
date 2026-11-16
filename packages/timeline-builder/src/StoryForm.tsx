@@ -92,7 +92,12 @@ export function StoryForm({
   };
 
   return (
-    <form className="th-story-form" onSubmit={submit}>
+    <form
+      className={
+        'th-story-form' + (useWpMedia ? ' th-story-form--compact' : '')
+      }
+      onSubmit={submit}
+    >
       {isEdit ? (
         <p className="th-form-mode">
           <button type="button" className="th-link-btn" onClick={onCancelEdit} disabled={busy}>
@@ -127,7 +132,7 @@ export function StoryForm({
           placeholder="Tekst fra arkiv.dk (Beskrivelse) eller egen brødtekst på kortet."
           value={draft.excerpt ?? ''}
           onChange={(e) => setDraft({ ...draft, excerpt: e.target.value })}
-          rows={3}
+          rows={useWpMedia ? 2 : 3}
           disabled={busy}
         />
       </label>
@@ -137,12 +142,19 @@ export function StoryForm({
           placeholder="Fra arkiv.dk – vises når besøgende åbner billedet i popup."
           value={draft.bemaerkning ?? ''}
           onChange={(e) => setDraft({ ...draft, bemaerkning: e.target.value })}
-          rows={2}
+          rows={useWpMedia ? 1 : 2}
           disabled={busy}
         />
       </label>
 
-      <div className="th-sf-field">
+      <div
+        className="th-sf-field"
+        title={
+          useWpMedia
+            ? 'Vælg eller upload fra WordPress-mediebiblioteket. Flere billeder = slideshow.'
+            : undefined
+        }
+      >
         <span className="th-sf-field__label">Billeder</span>
         <p className="th-sf-field__hint">
           {useWpMedia

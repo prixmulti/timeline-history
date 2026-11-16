@@ -6,7 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/index.tsx --format esm --dts --external react --external react-dom --external @timeline-history/timeline-core && tsup --config tsup.wp.config.ts && node scripts/build-css.mjs",
+    "build": "tsup src/index.tsx --format esm --dts --external react --external react-dom --external @timeline-history/timeline-core && node scripts/build-css.mjs",
     "dev": "tsup src/index.tsx --format esm --dts --watch --external react --external react-dom --external @timeline-history/timeline-core"
   },
   "dependencies": {

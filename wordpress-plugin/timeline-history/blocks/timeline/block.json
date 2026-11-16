@@ -6,7 +6,7 @@
   "category": "widgets",
   "icon": "backup",
   "description": "Vis en tidslinje med dine historier.",
-  "textdomain": "timeline-history",
+  "textdomain": "arkivtimeline",
   "attributes": {
     "layout": {
       "type": "string",
@@ -38,7 +38,8 @@
     }
   },
   "supports": {
-    "html": false
+    "html": false,
+    "align": ["wide", "full"]
   },
   "editorScript": "file:./build/index.js",
   "editorStyle": "file:./build/index.css",

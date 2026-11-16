@@ -65,7 +65,7 @@ class Timeline_History_Meta {
 	public function meta_boxes(): void {
 		add_meta_box(
 			'th_story_details',
-			__( 'Historiedetaljer', 'timeline-history' ),
+			__( 'Historiedetaljer', 'arkivtimeline' ),
 			array( $this, 'render_box' ),
 			'timeline_story',
 			'side',
@@ -84,19 +84,19 @@ class Timeline_History_Meta {
 		}
 		?>
 		<p>
-			<label for="th_story_date"><strong><?php esc_html_e( 'Date', 'timeline-history' ); ?></strong></label>
+			<label for="th_story_date"><strong><?php esc_html_e( 'Date', 'arkivtimeline' ); ?></strong></label>
 			<input type="date" id="th_story_date" name="th_story_date" value="<?php echo esc_attr( $date ); ?>" class="widefat" />
 		</p>
 		<p>
-			<label for="th_story_icon"><?php esc_html_e( 'Icon (emoji or character)', 'timeline-history' ); ?></label>
+			<label for="th_story_icon"><?php esc_html_e( 'Icon (emoji or character)', 'arkivtimeline' ); ?></label>
 			<input type="text" id="th_story_icon" name="th_story_icon" value="<?php echo esc_attr( $icon ); ?>" class="widefat" />
 		</p>
 		<p>
-			<label for="th_story_color"><?php esc_html_e( 'Accent color', 'timeline-history' ); ?></label>
+			<label for="th_story_color"><?php esc_html_e( 'Accent color', 'arkivtimeline' ); ?></label>
 			<input type="color" id="th_story_color" name="th_story_color" value="<?php echo esc_attr( $color ? $color : '#b85c38' ); ?>" />
 		</p>
 		<p>
-			<label for="th_story_order"><?php esc_html_e( 'Custom order (optional)', 'timeline-history' ); ?></label>
+			<label for="th_story_order"><?php esc_html_e( 'Custom order (optional)', 'arkivtimeline' ); ?></label>
 			<input type="number" id="th_story_order" name="th_story_order" value="<?php echo esc_attr( $order ); ?>" class="widefat" />
 		</p>
 		<?php

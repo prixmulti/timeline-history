@@ -31,12 +31,12 @@ class Timeline_History_Arkiv_Client {
 	public static function build_search_url( string $url, ?int $from, ?int $to, int $page = 1 ): string|WP_Error {
 		$url = trim( $url );
 		if ( $url === '' ) {
-			return new WP_Error( 'th_arkiv_url', __( 'Indsæt et arkiv.dk-søgelink.', 'timeline-history' ) );
+			return new WP_Error( 'th_arkiv_url', __( 'Indsæt et arkiv.dk-søgelink.', 'arkivtimeline' ) );
 		}
 
 		$parts = wp_parse_url( $url );
 		if ( empty( $parts['host'] ) || false === stripos( (string) $parts['host'], 'arkiv.dk' ) ) {
-			return new WP_Error( 'th_arkiv_host', __( 'Linket skal pege på arkiv.dk.', 'timeline-history' ) );
+			return new WP_Error( 'th_arkiv_host', __( 'Linket skal pege på arkiv.dk.', 'arkivtimeline' ) );
 		}
 
 		$query = array();
@@ -261,7 +261,7 @@ class Timeline_History_Arkiv_Client {
 				'th_arkiv_archives_http',
 				sprintf(
 					/* translators: %d: HTTP status */
-					__( 'Kunne ikke hente arkivlisten fra arkiv.dk (HTTP %d).', 'timeline-history' ),
+					__( 'Kunne ikke hente arkivlisten fra arkiv.dk (HTTP %d).', 'arkivtimeline' ),
 					$code
 				)
 			);
@@ -269,7 +269,7 @@ class Timeline_History_Arkiv_Client {
 
 		$data = json_decode( $body, true );
 		if ( ! is_array( $data ) || ! isset( $data['Results'] ) || ! is_array( $data['Results'] ) ) {
-			return new WP_Error( 'th_arkiv_archives_json', __( 'Ugyldigt svar fra arkiv.dk (arkivliste).', 'timeline-history' ) );
+			return new WP_Error( 'th_arkiv_archives_json', __( 'Ugyldigt svar fra arkiv.dk (arkivliste).', 'arkivtimeline' ) );
 		}
 
 		return array(
@@ -312,7 +312,7 @@ class Timeline_History_Arkiv_Client {
 				'th_arkiv_http',
 				sprintf(
 					/* translators: %d: HTTP status */
-					__( 'Kunne ikke hente arkiv.dk (HTTP %d).', 'timeline-history' ),
+					__( 'Kunne ikke hente arkiv.dk (HTTP %d).', 'arkivtimeline' ),
 					$code
 				)
 			);
@@ -785,7 +785,7 @@ class Timeline_History_Arkiv_Client {
 	public static function fetch_detail( string $arkiv_id ) {
 		$arkiv_id = preg_replace( '/\D+/', '', $arkiv_id );
 		if ( $arkiv_id === '' ) {
-			return new WP_Error( 'th_arkiv_id', __( 'Ugyldigt arkiv-id.', 'timeline-history' ) );
+			return new WP_Error( 'th_arkiv_id', __( 'Ugyldigt arkiv-id.', 'arkivtimeline' ) );
 		}
 
 		$url = 'https://arkiv.dk/vis/' . rawurlencode( $arkiv_id );
@@ -808,7 +808,7 @@ class Timeline_History_Arkiv_Client {
 		$code = (int) wp_remote_retrieve_response_code( $response );
 		$body = (string) wp_remote_retrieve_body( $response );
 		if ( $code < 200 || $code >= 300 || $body === '' ) {
-			return new WP_Error( 'th_arkiv_detail', __( 'Kunne ikke hente registreringen på arkiv.dk.', 'timeline-history' ) );
+			return new WP_Error( 'th_arkiv_detail', __( 'Kunne ikke hente registreringen på arkiv.dk.', 'arkivtimeline' ) );
 		}
 
 		$out = array();
@@ -1007,7 +1007,7 @@ class Timeline_History_Arkiv_Client {
 	public static function import_items( array $items, string $timeline_name = '', int $max_gallery_images = 0 ) {
 		$timeline_name = sanitize_text_field( trim( $timeline_name ) );
 		if ( $timeline_name === '' ) {
-			return new WP_Error( 'th_timeline_name', __( 'Angiv et navn til tidslinjen.', 'timeline-history' ) );
+			return new WP_Error( 'th_timeline_name', __( 'Angiv et navn til tidslinjen.', 'arkivtimeline' ) );
 		}
 
 		$set = Timeline_History_Sets::ensure( $timeline_name );
@@ -1015,6 +1015,7 @@ class Timeline_History_Arkiv_Client {
 			return $set;
 		}
 
+		// phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- batch arkiv import may exceed default max execution time.
 		@set_time_limit( 300 );
 
 		$created = 0;
@@ -1108,10 +1109,13 @@ class Timeline_History_Arkiv_Client {
 			'post_status'    => 'any',
 			'posts_per_page' => 1,
 			'fields'         => 'ids',
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- lookup existing import row.
 			'meta_key'       => self::ARKIV_ID_KEY,
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- lookup existing import row.
 			'meta_value'     => $arkiv_id,
 		);
 		if ( $timeline_slug !== '' ) {
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- scope dedupe to timeline set.
 			$args['tax_query'] = array(
 				array(
 					'taxonomy' => Timeline_History_Sets::TAXONOMY,

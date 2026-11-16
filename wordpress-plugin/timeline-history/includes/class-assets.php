@@ -14,6 +14,30 @@ class Timeline_History_Assets {
 	private static $frontend_enqueued = false;
 	private static $builder_enqueued  = false;
 
+	/**
+	 * @return array{dependencies: array<int, string>, version: string}
+	 */
+	private static function script_asset( string $basename ): array {
+		$file = TIMELINE_HISTORY_DIR . 'assets/dist/' . $basename . '.asset.php';
+		if ( ! file_exists( $file ) ) {
+			return array(
+				'dependencies' => array(),
+				'version'      => TIMELINE_HISTORY_VERSION,
+			);
+		}
+		$asset = include $file;
+		if ( ! is_array( $asset ) ) {
+			return array(
+				'dependencies' => array(),
+				'version'      => TIMELINE_HISTORY_VERSION,
+			);
+		}
+		return array(
+			'dependencies' => isset( $asset['dependencies'] ) && is_array( $asset['dependencies'] ) ? $asset['dependencies'] : array(),
+			'version'      => isset( $asset['version'] ) ? (string) $asset['version'] : TIMELINE_HISTORY_VERSION,
+		);
+	}
+
 	public function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend' ) );
 		add_action( 'enqueue_block_assets', array( $this, 'block_editor_styles' ) );
@@ -36,11 +60,12 @@ class Timeline_History_Assets {
 		}
 
 		if ( file_exists( $dir . 'view.js' ) ) {
+			$view_asset = self::script_asset( 'view' );
 			wp_register_script(
 				'timeline-history-view',
 				$url . 'view.js',
-				array(),
-				TIMELINE_HISTORY_VERSION,
+				$view_asset['dependencies'],
+				$view_asset['version'],
 				true
 			);
 		}
@@ -65,11 +90,12 @@ class Timeline_History_Assets {
 			);
 		}
 		if ( ! wp_script_is( 'timeline-history-view', 'registered' ) && file_exists( $dir . 'view.js' ) ) {
+			$view_asset = self::script_asset( 'view' );
 			wp_register_script(
 				'timeline-history-view',
 				$url . 'view.js',
-				array(),
-				TIMELINE_HISTORY_VERSION,
+				$view_asset['dependencies'],
+				$view_asset['version'],
 				true
 			);
 		}
@@ -123,11 +149,15 @@ class Timeline_History_Assets {
 		wp_enqueue_style( 'timeline-history-builder', $url . 'builder.css', array(), TIMELINE_HISTORY_VERSION );
 		wp_enqueue_style( 'timeline-history-view', $url . 'timeline.css', array(), TIMELINE_HISTORY_VERSION );
 
+		$builder_asset = self::script_asset( 'builder' );
+		$builder_deps  = array_merge( array( 'jquery' ), $builder_asset['dependencies'] );
+		$builder_deps  = array_values( array_unique( $builder_deps ) );
+
 		wp_enqueue_script(
 			'timeline-history-builder',
 			$url . 'builder.js',
-			array( 'jquery' ),
-			TIMELINE_HISTORY_VERSION,
+			$builder_deps,
+			$builder_asset['version'],
 			true
 		);
 

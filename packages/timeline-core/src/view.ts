@@ -3,6 +3,7 @@
  */
 import { createElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
+import { applyThemeAdapt } from './themeAdapt';
 import { TimelineView } from './TimelineView';
 import type { TimelinePayload } from './types';
 
@@ -26,6 +27,12 @@ export function mountTimelineEmbed(el: HTMLElement): void {
   const payload = parsePayload(el);
   if (!payload) return;
 
+  const config = applyThemeAdapt(
+    { themeAdapt: 'auto', ...payload.config },
+    payload.themeHints,
+    el
+  );
+
   // Clear PHP empty-state / JSON script before React mount.
   el.querySelectorAll(':scope > .th-embed__empty, :scope > script.th-embed__data').forEach((n) =>
     n.remove()
@@ -39,7 +46,7 @@ export function mountTimelineEmbed(el: HTMLElement): void {
 
   root.render(
     createElement(TimelineView, {
-      config: payload.config,
+      config,
       stories: payload.stories ?? [],
       imageLightbox: true,
     })

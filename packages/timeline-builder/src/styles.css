@@ -724,6 +724,32 @@
   gap: 1.1rem;
 }
 
+.th-display__section--adapt {
+  margin: 0;
+}
+
+.th-theme-adapt {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--th-ui-text, #152019);
+  cursor: pointer;
+}
+
+.th-theme-adapt input {
+  margin: 0.15rem 0 0;
+  accent-color: #3d5a4c;
+}
+
+.th-theme-adapt__hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--th-ui-muted, #5f6e66);
+}
+
 .th-display__section-head {
   display: flex;
   align-items: center;
@@ -1224,6 +1250,110 @@
   min-height: 560px;
 }
 
+/* Studio: kompakt venstre kolonne (undgå scroll i sidebar) */
+.th-studio .th-studio__aside {
+  gap: 0.65rem;
+}
+
+.th-studio .th-studio__card {
+  padding: 0.7rem 0.8rem;
+}
+
+.th-studio .th-studio__card-head {
+  margin-bottom: 0.45rem;
+}
+
+.th-studio .th-studio__card-head h2 {
+  font-size: 0.92rem;
+}
+
+.th-studio .th-studio__pill {
+  font-size: 0.62rem;
+  padding: 0.18rem 0.45rem;
+  letter-spacing: 0.06em;
+}
+
+.th-studio .th-sf-field {
+  margin-bottom: 0.45rem;
+}
+
+.th-studio .th-story-form--compact .th-form-mode {
+  margin: 0 0 0.35rem;
+  font-size: 0.76rem;
+}
+
+.th-studio .th-story-form--compact .th-form-mode--muted {
+  display: none;
+}
+
+.th-studio .th-sf-field__label {
+  font-size: 0.64rem;
+  margin-bottom: 0.18rem;
+  letter-spacing: 0.07em;
+}
+
+.th-studio .th-story-form input,
+.th-studio .th-story-form textarea,
+.th-studio .th-studio__timeline-select {
+  padding: 0.32rem 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  border-radius: 7px;
+}
+
+.th-studio .th-story-form--compact textarea {
+  min-height: 2.1rem;
+  resize: vertical;
+  max-height: 5.5rem;
+}
+
+.th-studio .th-story-form--compact .th-sf-field__hint {
+  display: none;
+}
+
+.th-studio .th-thumbs {
+  gap: 0.35rem;
+}
+
+.th-studio .th-thumb {
+  width: 46px;
+  height: 46px;
+  border-radius: 7px;
+}
+
+.th-studio .th-thumb--add {
+  font-size: 1.15rem;
+}
+
+.th-studio .th-sf-btn {
+  padding: 0.38rem 0.7rem;
+  font-size: 0.78rem;
+  border-radius: 7px;
+}
+
+.th-studio .th-sf-btn--block {
+  margin-top: 0.15rem;
+}
+
+.th-studio .th-sf-btn--danger {
+  margin-top: 0.35rem;
+}
+
+.th-studio .th-sf-btn--icon {
+  width: 1.95rem;
+  height: 1.95rem;
+  font-size: 1.05rem;
+}
+
+.th-studio .th-studio__shortcode--compact {
+  margin-top: 0.35rem;
+  gap: 0.3rem;
+}
+
+.th-studio .th-studio__timeline-row {
+  gap: 0.35rem;
+}
+
 .th-story-form input,
 .th-story-form textarea {
   width: 100%;
@@ -1592,6 +1722,12 @@
   border-color: rgba(163, 59, 43, 0.28);
   background: #fdf2f0;
   color: #7a3024;
+}
+
+.th-arkiv-notice--warning {
+  border-color: rgba(180, 140, 40, 0.35);
+  background: #fff8e5;
+  color: #6b4e00;
 }
 
 .th-arkiv-preview-head {

@@ -23,13 +23,16 @@ class Timeline_History_Settings {
 	 * Custom SVG for wp-admin (20×20).
 	 */
 	public static function admin_menu_icon(): string {
-		$svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">'
-			. '<path d="M2.75 10.25h14.5" stroke="#a7aaad" stroke-width="1.4" stroke-linecap="round"/>'
-			. '<circle cx="4.75" cy="10.25" r="1.85" fill="#a7aaad"/>'
-			. '<circle cx="10" cy="10.25" r="1.85" fill="#a7aaad"/>'
-			. '<circle cx="15.25" cy="10.25" r="1.85" fill="#a7aaad"/>'
-			. '<rect x="2.25" y="4.25" width="6.75" height="4.75" rx="1" stroke="#a7aaad" stroke-width="1.2"/>'
-			. '<path d="M3.75 6.15h4.75M3.75 7.65h3.25" stroke="#a7aaad" stroke-width="0.95" stroke-linecap="round"/>'
+		// Arkiv: farvet A + tidslinje (matcher tidslinjens accent/linje på fronten).
+		$accent = '#e8925f';
+		$line   = '#5a8f75';
+		$svg    = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" aria-hidden="true">'
+			. '<path d="M5.25 12.75L10 4.25l4.75 8.5" stroke="' . $accent . '" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>'
+			. '<path d="M7.1 9.75h5.8" stroke="' . $accent . '" stroke-width="1.2" stroke-linecap="round"/>'
+			. '<path d="M3.5 15.75h13" stroke="' . $line . '" stroke-width="1.2" stroke-linecap="round"/>'
+			. '<circle cx="5" cy="15.75" r="1.35" fill="' . $accent . '"/>'
+			. '<circle cx="10" cy="15.75" r="1.35" fill="' . $line . '"/>'
+			. '<circle cx="15" cy="15.75" r="1.35" fill="' . $accent . '"/>'
 			. '</svg>';
 
 		return 'data:image/svg+xml;base64,' . base64_encode( $svg );
@@ -38,8 +41,8 @@ class Timeline_History_Settings {
 	public function timeline_sets_menu(): void {
 		add_submenu_page(
 			self::ADMIN_MENU_SLUG,
-			__( 'Tidslinjer', 'timeline-history' ),
-			__( 'Tidslinjer', 'timeline-history' ),
+			__( 'Tidslinjer', 'arkivtimeline' ),
+			__( 'Tidslinjer', 'arkivtimeline' ),
 			'edit_posts',
 			'edit-tags.php?taxonomy=' . Timeline_History_Sets::TAXONOMY . '&post_type=timeline_story'
 		);
@@ -58,7 +61,7 @@ class Timeline_History_Settings {
 
 		remove_submenu_page( $parent, 'edit.php?post_type=timeline_story' );
 
-		$import_label = __( 'Import fra Arkiv.dk', 'timeline-history' );
+		$import_label = __( 'Import fra Arkiv.dk', 'arkivtimeline' );
 		if ( isset( $submenu[ $parent ][0][0] ) ) {
 			$submenu[ $parent ][0][0] = $import_label;
 		}
@@ -113,6 +116,7 @@ class Timeline_History_Settings {
 			'date_format' => 'd. MMM yyyy',
 			'max_stories' => 0,
 			'line_style'  => 'solid',
+			'theme_adapt' => 'auto',
 		);
 	}
 
@@ -131,6 +135,7 @@ class Timeline_History_Settings {
 		$out['date_format'] = sanitize_text_field( $input['date_format'] ?? $out['date_format'] );
 		$out['max_stories'] = absint( $input['max_stories'] ?? 0 );
 		$out['line_style']  = in_array( $input['line_style'] ?? '', array( 'solid', 'dashed', 'gradient' ), true ) ? $input['line_style'] : $out['line_style'];
+		$out['theme_adapt'] = in_array( $input['theme_adapt'] ?? '', array( 'auto', 'off' ), true ) ? $input['theme_adapt'] : $out['theme_adapt'];
 		if ( isset( $input['tokens'] ) && is_array( $input['tokens'] ) ) {
 			$out['tokens'] = $input['tokens'];
 		}
@@ -154,6 +159,7 @@ class Timeline_History_Settings {
 			'categorySlugs' => isset( $s['category_slugs'] ) && is_array( $s['category_slugs'] ) ? $s['category_slugs'] : array(),
 			'maxStories'    => (int) $s['max_stories'],
 			'lineStyle'     => $s['line_style'],
+			'themeAdapt'    => in_array( $s['theme_adapt'] ?? '', array( 'auto', 'off' ), true ) ? $s['theme_adapt'] : 'auto',
 			'tokens'        => isset( $s['tokens'] ) && is_array( $s['tokens'] ) ? $s['tokens'] : array(),
 		);
 	}
@@ -165,29 +171,29 @@ class Timeline_History_Settings {
 		$s = self::get();
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'ArkivTimeline – standardindstillinger', 'timeline-history' ); ?></h1>
+			<h1><?php esc_html_e( 'ArkivTimeline – standardindstillinger', 'arkivtimeline' ); ?></h1>
 
 			<p class="description" style="margin:8px 0 16px;">
-				<?php esc_html_e( 'Shortcode til sider:', 'timeline-history' ); ?>
+				<?php esc_html_e( 'Shortcode til sider:', 'arkivtimeline' ); ?>
 				<code>[timeline_history timeline="slug"]</code>
 				-
-				<?php esc_html_e( 'eller blokken ArkivTimeline. I Studio: kopiér shortcode under den aktive tidslinje; visning via tandhjulet.', 'timeline-history' ); ?>
+				<?php esc_html_e( 'eller blokken ArkivTimeline. I Studio: kopiér shortcode under den aktive tidslinje; visning via tandhjulet.', 'arkivtimeline' ); ?>
 			</p>
 
 			<form method="post" action="options.php">
 				<?php settings_fields( 'timeline_history' ); ?>
 				<table class="form-table">
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Default layout', 'timeline-history' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Default layout', 'arkivtimeline' ); ?></th>
 						<td>
 							<select name="<?php echo esc_attr( self::OPTION_KEY ); ?>[layout]">
-								<option value="vertical" <?php selected( $s['layout'], 'vertical' ); ?>><?php esc_html_e( 'Vertical', 'timeline-history' ); ?></option>
-								<option value="horizontal" <?php selected( $s['layout'], 'horizontal' ); ?>><?php esc_html_e( 'Horizontal', 'timeline-history' ); ?></option>
+								<option value="vertical" <?php selected( $s['layout'], 'vertical' ); ?>><?php esc_html_e( 'Vertical', 'arkivtimeline' ); ?></option>
+								<option value="horizontal" <?php selected( $s['layout'], 'horizontal' ); ?>><?php esc_html_e( 'Horizontal', 'arkivtimeline' ); ?></option>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Default theme', 'timeline-history' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Default theme', 'arkivtimeline' ); ?></th>
 						<td>
 							<select name="<?php echo esc_attr( self::OPTION_KEY ); ?>[theme]">
 								<?php foreach ( array( 'minimal', 'card', 'editorial' ) as $theme ) : ?>
@@ -199,7 +205,7 @@ class Timeline_History_Settings {
 				</table>
 				<?php submit_button(); ?>
 			</form>
-			<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=timeline-history-builder' ) ); ?>" class="button button-primary"><?php esc_html_e( 'Åbn Studio', 'timeline-history' ); ?></a></p>
+			<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=timeline-history-builder' ) ); ?>" class="button button-primary"><?php esc_html_e( 'Åbn Studio', 'arkivtimeline' ); ?></a></p>
 		</div>
 		<?php
 	}

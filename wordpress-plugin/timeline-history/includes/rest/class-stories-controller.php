@@ -175,7 +175,7 @@ class Timeline_History_Stories_Controller {
 		if ( $timeline === '' ) {
 			return new WP_Error(
 				'th_timeline_required',
-				__( 'Vælg en tidslinje før visning gemmes.', 'timeline-history' ),
+				__( 'Vælg en tidslinje før visning gemmes.', 'arkivtimeline' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -184,7 +184,7 @@ class Timeline_History_Stories_Controller {
 		if ( ! $set ) {
 			return new WP_Error(
 				'th_timeline_unknown',
-				__( 'Ukendt tidslinje.', 'timeline-history' ),
+				__( 'Ukendt tidslinje.', 'arkivtimeline' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -198,6 +198,9 @@ class Timeline_History_Stories_Controller {
 			'date_format' => $config['dateFormat'] ?? '',
 			'max_stories' => isset( $config['maxStories'] ) ? (int) $config['maxStories'] : 0,
 			'line_style'  => $config['lineStyle'] ?? '',
+			'theme_adapt' => in_array( $config['themeAdapt'] ?? '', array( 'auto', 'off' ), true )
+				? $config['themeAdapt']
+				: 'auto',
 		);
 
 		if ( isset( $config['tokens'] ) && is_array( $config['tokens'] ) ) {

@@ -34,7 +34,7 @@ npm run pack:plugin
 3. Aktiver **Timeline History**.
 4. Kræver WordPress 6.4+ og PHP 7.4+.
 
-`npm run pack:plugin` kører `npm run build` først og pakker altid `assets/dist/` plus `blocks/timeline/build/` (uden `node_modules`).
+`npm run pack:plugin` kører `npm run build` først, **hæver patch-version** i `timeline-history.php` (fx 0.3.65 → 0.3.66), og pakker `assets/dist/` plus `blocks/timeline/build/` (uden `node_modules`). Brug `npm run pack:plugin -- --no-bump` hvis versionen ikke skal ændres, eller `--version=0.4.0` for manuelt nummer.
 
 ### Navngivne tidslinjer
 
@@ -108,6 +108,7 @@ Default site: [http://localhost:8888](http://localhost:8888)
 
 ## Reference
 
-`cool-timeline-pro/` is the legacy reference plugin (unchanged).
-
-See [docs/architecture.md](docs/architecture.md) for data flow and build order.
+- **[ArkivTimeline – projektbeskrivelse (dansk)](docs/arkivtimeline.md)** – formål, funktioner, arkitektur og workflows  
+- **[Brugervejledning + figurer til InDesign](docs/arkivtimeline-brugerguide.md)** – til brochure med screendumps (`docs/arkivtimeline-indesign.txt` = ren tekst)
+- [architecture.md](docs/architecture.md) – dataflow og build-rækkefølge (teknisk)
+- `cool-timeline-pro/` – legacy reference plugin (unchanged)

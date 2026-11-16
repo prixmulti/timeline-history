@@ -9,6 +9,8 @@ export type TimelineTheme =
 export type TimelineSkin = 'light' | 'dark';
 export type TimelineAnimation = 'none' | 'fade-in';
 export type LineStyle = 'solid' | 'dashed' | 'gradient';
+/** Frontend: hent farver fra aktivt WordPress-tema når tokens mangler. */
+export type ThemeAdaptMode = 'auto' | 'off';
 
 export interface TokenOverrides {
   colors?: {
@@ -36,6 +38,8 @@ export interface TimelineConfig {
   categorySlugs: string[];
   maxStories: number;
   lineStyle: LineStyle;
+  /** Default `auto` på sider; sæt `off` for at låse farver fra Studio. */
+  themeAdapt?: ThemeAdaptMode;
   tokens?: TokenOverrides;
 }
 
@@ -63,6 +67,8 @@ export interface TimelineStory {
 export interface TimelinePayload {
   config: TimelineConfig;
   stories: TimelineStory[];
+  /** Server-side farvehints (block-tema / customizer) før DOM-udlæsning. */
+  themeHints?: Partial<NonNullable<TokenOverrides['colors']>>;
 }
 
 export const defaultConfig = (): TimelineConfig => ({
@@ -75,5 +81,6 @@ export const defaultConfig = (): TimelineConfig => ({
   categorySlugs: [],
   maxStories: 0,
   lineStyle: 'solid',
+  themeAdapt: 'auto',
   tokens: {},
 });

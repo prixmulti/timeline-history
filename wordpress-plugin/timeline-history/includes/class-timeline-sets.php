@@ -45,6 +45,7 @@ class Timeline_History_Sets {
 					'fields'         => 'ids',
 					'posts_per_page' => -1,
 					'no_found_rows'  => true,
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- delete stories in timeline set.
 					'tax_query'      => array(
 						array(
 							'taxonomy' => self::TAXONOMY,
@@ -77,7 +78,7 @@ class Timeline_History_Sets {
 	public static function ensure( string $name ) {
 		$name = sanitize_text_field( trim( $name ) );
 		if ( $name === '' ) {
-			return new WP_Error( 'th_timeline_name', __( 'Tidslinjen skal have et navn.', 'timeline-history' ) );
+			return new WP_Error( 'th_timeline_name', __( 'Tidslinjen skal have et navn.', 'arkivtimeline' ) );
 		}
 
 		$existing = term_exists( $name, self::TAXONOMY );
@@ -96,7 +97,7 @@ class Timeline_History_Sets {
 
 		$term = get_term( (int) $created['term_id'], self::TAXONOMY );
 		if ( ! $term || is_wp_error( $term ) ) {
-			return new WP_Error( 'th_timeline_create', __( 'Kunne ikke oprette tidslinjen.', 'timeline-history' ) );
+			return new WP_Error( 'th_timeline_create', __( 'Kunne ikke oprette tidslinjen.', 'arkivtimeline' ) );
 		}
 
 		return self::map_term( $term );

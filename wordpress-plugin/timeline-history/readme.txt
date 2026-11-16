@@ -1,5 +1,5 @@
 === ArkivTimeline ===
-Contributors: arkivtimeline
+Contributors: prixmulti
 Tags: timeline, archive, history, arkiv.dk, shortcode
 Requires at least: 6.4
 Tested up to: 7.1

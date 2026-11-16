@@ -6,7 +6,8 @@
  * Version:           0.3.73
  * Requires at least: 6.4
  * Requires PHP:      7.4
- * Author:            ArkivTimeline
+ * Author:            Palle Rix
+ * Author URI:        https://github.com/prixmulti
  * License:           GPL-2.0-or-later
  * Text Domain:       arkivtimeline
  *

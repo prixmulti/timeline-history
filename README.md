@@ -1,114 +1,93 @@
-# Timeline History (MVP)
+# ArkivTimeline
 
-Modern WordPress timeline plugin with a monorepo for local development in Cursor.
+WordPress-plugin til visuelle tidslinjer med import fra [arkiv.dk](https://www.arkiv.dk), redaktionelt **Studio** og visning på sider via shortcode eller Gutenberg-blok.
 
-## Quick start (Cursor simulation)
+| | |
+|---|---|
+| **WordPress.org slug** | `arkivtimeline` (efter godkendelse) |
+| **Plugin-kilde** | `wordpress-plugin/timeline-history/` |
+| **Licens** | GPL-2.0-or-later |
+| **Krav** | WordPress 6.4+, PHP 7.4+ |
 
-```bash
-npm install
-npm run build
-npm run dev
-```
+## Hvem står bag?
 
-Open [http://localhost:5173](http://localhost:5173):
+**ArkivTimeline** er udviklet af **Palle Rix** ([GitHub: @prixmulti](https://github.com/prixmulti), [prix.dk](https://prix.dk)).
 
-- **Admin** - add stories, tune layout/theme, live preview
-- **Front (side)** - see the embed as on a WordPress page
+Projektet er bygget til lokalarkiver og historieforeninger, der vil vise kronologiske historier på WordPress uden at genindtaste alt materiale fra arkiv.dk.
 
-Playground data is stored in `localStorage`. Use **Eksporter JSON** to save fixtures.
+Har du spørgsmål, fejl eller idéer: åbn et [issue på GitHub](https://github.com/prixmulti/timeline-history/issues) eller brug kontakt via [prix.dk](https://prix.dk).
 
-## Rigtig WordPress-side
+## Funktioner (kort)
 
-Pluginnet gemmer historier i WordPress-databasen (custom post type `timeline_story`, post meta og options). Playgroundens `localStorage` bruges kun til lokal demo.
+- Import fra arkiv.dk med forhåndsvisning, årsfilter og valg af poster
+- **Studio** med live preview, per-tidslinje visningsindstillinger og shortcode
+- Shortcode `[timeline_history]` og blokken **ArkivTimeline**
+- Tilpasning til aktivt WordPress-tema (farver og typografi)
 
-### Installer pluginnet
+## Installér plugin (produktion)
 
-1. Byg og pack en ren zip fra repo-roden:
+### Fra release / zip
 
 ```bash
 npm install
 npm run pack:plugin
 ```
 
-2. Upload `dist/timeline-history.zip` i wp-admin under **Plugins → Add New → Upload Plugin**, eller kopiér mappen `wordpress-plugin/timeline-history` til `wp-content/plugins/timeline-history/`.
-3. Aktiver **Timeline History**.
-4. Kræver WordPress 6.4+ og PHP 7.4+.
+Upload **`dist/arkivtimeline.zip`** i wp-admin under **Plugins → Add New → Upload Plugin**, og aktiver **ArkivTimeline**.
 
-`npm run pack:plugin` kører `npm run build` først, **hæver patch-version** i `timeline-history.php` (fx 0.3.65 → 0.3.66), og pakker `assets/dist/` plus `blocks/timeline/build/` (uden `node_modules`). Brug `npm run pack:plugin -- --no-bump` hvis versionen ikke skal ændres, eller `--version=0.4.0` for manuelt nummer.
+Mappen i zip hedder `arkivtimeline/` (matcher WordPress.org-slug). `pack:plugin` kører build og kan hæve patch-version i `timeline-history.php`. Brug `npm run pack:plugin -- --no-bump` eller `--version=x.y.z` efter behov.
 
-### Navngivne tidslinjer
+### Når pluginet er på WordPress.org
 
-Hver samling af historier har sit eget navn (taxonomy `timeline_set`). Brug et nyt navn pr. arkiv.dk-import eller emne, så shortcodes kan pege på den rigtige.
+Opdateringer til sites, der installerede fra **wordpress.org**, kommer via **Plugins → Opdateringer** – ikke automatisk fra GitHub. GitHub er kildekode og dokumentation; udgivelser sker via WordPress.org SVN efter godkendelse.
 
-### Opret historier (anbefalet: Studio)
+## Brug på sitet
 
-1. Gå til **Timeline → Studio**.
-2. Vælg eller opret en **tidslinje** øverst i venstre panel.
-3. Tilføj/rediger/slet historier (klik på et kort i preview for at redigere).
-4. Juster layout/tema/farver under **Visning** - gemmes automatisk.
-5. Alternativt: **Timeline → Alle historier** (standard WP-editor) eller **Timeline → Tidslinjer**.
-
-### Kode på siderne
-
-**Shortcode** (klassisk editor, Shortcode-blok, Elementor shortcode-widget, osv.):
+**Shortcode:**
 
 ```
-[timeline_history timeline="ansager-1940"]
+[timeline_history timeline="dit-tidslinje-slug"]
 ```
 
-Med overrides:
+**Gutenberg:** blokken **ArkivTimeline** (kategori Widgets).
 
-```
-[timeline_history timeline="ansager-1940" layout="vertical" theme="editorial" skin="light" animation="fade-in" category="company" limit="10"]
-```
+Admin: **ArkivTimeline → Import fra Arkiv.dk** og **Studio**.
 
-| Attribute   | Værdier                                      |
-|------------|-----------------------------------------------|
-| `timeline` | slug for navngiven tidslinje (anbefalet)      |
-| `layout`   | `vertical`, `horizontal`                      |
-| `theme`    | `minimal`, `card`, `editorial`                |
-| `skin`     | `light`, `dark`                               |
-| `animation`| `none`, `fade-in`                             |
-| `category` | kommaseparerede kategori-slugs                |
-| `limit`    | max antal historier                           |
-| `show_media` | `1`, `true`, `yes`                          |
+## Udvikling (dette repo)
 
-Uden `timeline` vises alle historier. Tomme øvrige attributes bruger site-defaults fra **Timeline**.
-
-**Gutenberg-blok:** indsæt blokken **Timeline History** (kategori Widgets) og sæt tidslinje-slug, layout/theme/kategori i sidebaren.
-
-### Menu i wp-admin
-
-- **Timeline** - default settings
-- **Timeline → Studio** - vælg tidslinje, historier + visning + live preview
-- **Timeline → Arkiv-import** - import fra arkiv.dk med tidslinjenavn (billeder linkes eksternt)
-- **Timeline → Tidslinjer** - omdøb/administrer navngivne tidslinjer
-- **Timeline → Alle historier** - klassisk CPT-liste (valgfri)
-
-## Local WordPress (wp-env)
-
-Requires [Docker](https://www.docker.com/).
+Monorepo: React/TypeScript til timeline-UI, PHP til WordPress-plugin, webpack til frontend-scripts med WordPress’ React-afhængigheder.
 
 ```bash
 npm install
+npm run build          # hele monorepo + plugin assets + blok
+npm run dev            # lokal playground (Vite)
+npm run pack:plugin    # zip til WordPress
+```
+
+Valgfri lokal WordPress med [wp-env](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/) (kræver Docker):
+
+```bash
 npm run build
 npm run wp:start
 ```
 
-Default site: [http://localhost:8888](http://localhost:8888)
+Playground: [http://localhost:5173](http://localhost:5173) (`npm run dev`). WordPress: typisk [http://localhost:8888](http://localhost:8888).
 
-## Smoke checklist
+## Repo-struktur
 
-- [ ] Create 2+ timeline stories with dates and featured images
-- [ ] Insert **Timeline History** block on a page; view on front
-- [ ] Add `[timeline_history]` to a post; verify hydration (no empty box)
-- [ ] Open **Timeline → Builder**; stories load via REST
-- [ ] Switch layout horizontal/vertical on playground and in shortcode
-- [ ] Mobile width: vertical timeline single-column rail
+```
+packages/timeline-core/     # Tidslinje-UI (view)
+packages/timeline-builder/  # Studio (admin)
+wordpress-plugin/timeline-history/  # ArkivTimeline (PHP, blok, dist)
+```
 
-## Reference
+Mappen `cool-timeline-pro/` er kun legacy-reference og er ikke en del af produktet.
 
-- **[ArkivTimeline – projektbeskrivelse (dansk)](docs/arkivtimeline.md)** – formål, funktioner, arkitektur og workflows  
-- **[Brugervejledning + figurer til InDesign](docs/arkivtimeline-brugerguide.md)** – til brochure med screendumps (`docs/arkivtimeline-indesign.txt` = ren tekst)
-- [architecture.md](docs/architecture.md) – dataflow og build-rækkefølge (teknisk)
-- `cool-timeline-pro/` – legacy reference plugin (unchanged)
+## Links
+
+- **Kildekode:** https://github.com/prixmulti/timeline-history  
+- **WordPress-plugin (directory):** https://wordpress.org/plugins/arkivtimeline/ *(når godkendt)*
+
+---
+
+Udviklet af **Palle Rix**. Tak til lokalarkiver og testmiljøer, der har givet feedback under udviklingen.

@@ -59,6 +59,11 @@ function runBuild() {
 
 function assertBuiltAssets() {
   const required = [
+    join(pluginSrc, 'timeline-history.php'),
+    join(pluginSrc, 'includes/class-plugin.php'),
+    join(pluginSrc, 'includes/class-assets.php'),
+    join(pluginSrc, 'includes/class-shortcode.php'),
+    join(pluginSrc, 'includes/rest/class-stories-controller.php'),
     join(pluginSrc, 'readme.txt'),
     join(pluginSrc, 'assets/dist/view.js'),
     join(pluginSrc, 'assets/dist/view.asset.php'),

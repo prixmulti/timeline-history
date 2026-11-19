@@ -117,7 +117,7 @@ class Timeline_History_Embed_Render {
 			esc_attr( $wrapper_class ),
 			esc_attr( $embed_id ),
 			wp_kses( $empty_html, $allowed ),
-			esc_html( $payload )
+			$payload
 		);
 	}
 }

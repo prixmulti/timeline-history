@@ -21,9 +21,15 @@ import {
 } from 'docx';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
-const src = path.join(root, 'docs/arkivtimeline-brugerguide.md');
+const argMd = process.argv[2];
+const argDocx = process.argv[3];
+const src = argMd
+  ? path.resolve(root, argMd)
+  : path.join(root, 'docs/arkivtimeline-brugerguide.md');
 const outDir = path.join(root, 'docs/export');
-const outDocx = path.join(outDir, 'ArkivTimeline-brugerguide.docx');
+const outDocx = argDocx
+  ? path.resolve(root, argDocx)
+  : path.join(outDir, 'ArkivTimeline-brugerguide.docx');
 
 const md = fs.readFileSync(src, 'utf8');
 const lines = md.split(/\r?\n/);

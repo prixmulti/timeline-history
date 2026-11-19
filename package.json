@@ -13,6 +13,7 @@
     "build:plugin": "npm run build -w timeline-history-wp-assets && node scripts/copy-assets.mjs && npm run build -w timeline-history-block",
     "pack:plugin": "node scripts/pack-plugin.mjs",
     "export:guide": "node scripts/export-brugerguide-docx.mjs && node scripts/export-brugerguide-idml.mjs",
+    "export:sla": "node scripts/export-brugerguide-docx.mjs docs/arkivtimeline-sla-oversigt.md docs/export/ArkivTimeline-SLA-oversigt.docx",
     "wp:start": "wp-env start",
     "wp:stop": "wp-env stop"
   },

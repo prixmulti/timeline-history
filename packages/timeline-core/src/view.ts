@@ -9,6 +9,13 @@ import type { TimelinePayload } from './types';
 
 const roots = new WeakMap<Element, Root>();
 
+function decodeJsonText(raw: string): string {
+  if (!raw.includes('&')) return raw;
+  const ta = document.createElement('textarea');
+  ta.innerHTML = raw;
+  return ta.value;
+}
+
 function parsePayload(el: HTMLElement): TimelinePayload | null {
   const jsonNode = el.querySelector(':scope > script.th-embed__data[type="application/json"]');
   const raw =
@@ -16,16 +23,24 @@ function parsePayload(el: HTMLElement): TimelinePayload | null {
     el.getAttribute('data-timeline') ||
     '';
   if (!raw) return null;
-  try {
-    return JSON.parse(raw) as TimelinePayload;
-  } catch {
-    return null;
+  const candidates = [raw, decodeJsonText(raw)];
+  for (const text of candidates) {
+    try {
+      return JSON.parse(text) as TimelinePayload;
+    } catch {
+      /* try next */
+    }
   }
+  return null;
 }
 
-export function mountTimelineEmbed(el: HTMLElement): void {
+function embedHasTimeline(el: HTMLElement): boolean {
+  return !!el.querySelector(':scope > .th-timeline, :scope > .th-track');
+}
+
+export function mountTimelineEmbed(el: HTMLElement): boolean {
   const payload = parsePayload(el);
-  if (!payload) return;
+  if (!payload) return false;
 
   const config = applyThemeAdapt(
     { themeAdapt: 'auto', ...payload.config },
@@ -51,6 +66,7 @@ export function mountTimelineEmbed(el: HTMLElement): void {
       imageLightbox: true,
     })
   );
+  return true;
 }
 
 export function initTimelineEmbeds(scope: ParentNode = document): void {
@@ -58,9 +74,12 @@ export function initTimelineEmbeds(scope: ParentNode = document): void {
     '.th-embed[data-th-embed], .th-embed[data-timeline]'
   );
   nodes.forEach((el) => {
-    if (el.dataset.thMounted === '1') return;
-    el.dataset.thMounted = '1';
-    mountTimelineEmbed(el);
+    if (el.dataset.thMounted === '1' && embedHasTimeline(el)) return;
+    if (mountTimelineEmbed(el)) {
+      el.dataset.thMounted = '1';
+    } else {
+      delete el.dataset.thMounted;
+    }
   });
 }
 

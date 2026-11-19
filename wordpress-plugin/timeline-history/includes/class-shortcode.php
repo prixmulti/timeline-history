@@ -13,6 +13,30 @@ class Timeline_History_Shortcode {
 
 	public function __construct() {
 		add_shortcode( 'timeline_history', array( $this, 'render' ) );
+		// Before do_shortcode (11): Word/Gutenberg “smart quotes” break the shortcode regex.
+		add_filter( 'the_content', array( $this, 'normalize_timeline_shortcode_quotes' ), 9 );
+		add_filter( 'widget_text_content', array( $this, 'normalize_timeline_shortcode_quotes' ), 9 );
+	}
+
+	/**
+	 * Replace curly quotes inside [timeline_history …] so WordPress parses the tag.
+	 */
+	public function normalize_timeline_shortcode_quotes( string $content ): string {
+		if ( strpos( $content, 'timeline_history' ) === false ) {
+			return $content;
+		}
+
+		return preg_replace_callback(
+			'/\[timeline_history\b[^\]]*\]/iu',
+			static function ( array $m ): string {
+				return str_replace(
+					array( "\u{201C}", "\u{201D}", "\u{2018}", "\u{2019}" ),
+					array( '"', '"', "'", "'" ),
+					$m[0]
+				);
+			},
+			$content
+		) ?? $content;
 	}
 
 	/**

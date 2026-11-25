@@ -22,6 +22,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const pluginSrc = join(root, 'wordpress-plugin/timeline-history');
 /** Zip folder name / wp.org slug – must not collide with existing directory plugins (e.g. timeline-history). */
 /** Must match wordpress.org plugin slug (no hyphens). */
+/** Match wp.org submission slug until Plugins Team reserves prix-historical-timeline. */
 const DISTRIBUTION_SLUG = 'arkivtimeline';
 const outDir = join(root, 'dist');
 const staging = join(outDir, DISTRIBUTION_SLUG);
@@ -212,6 +213,6 @@ copyTree(pluginSrc, staging);
 
 await zipDirectory(staging, zipPath);
 
-console.log(`Packed ArkivTimeline v${packVersion.next}: ${relative(root, zipPath)}`);
+console.log(`Packed Historical Timeline v${packVersion.next}: ${relative(root, zipPath)}`);
 console.log('Upload this zip in WordPress → Plugins → Add New → Upload Plugin.');
 console.log('Tip: --no-bump skips version increment; --version=1.2.3 sets an explicit version.');

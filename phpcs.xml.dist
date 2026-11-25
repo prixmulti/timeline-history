@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="Timeline History">
-	<description>WordPress Coding Standards for the ArkivTimeline plugin.</description>
+	<description>WordPress Coding Standards for the Historical Timeline plugin.</description>
 
 	<file>wordpress-plugin/timeline-history</file>
 

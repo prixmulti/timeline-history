@@ -41,8 +41,8 @@ class Timeline_History_Settings {
 	public function timeline_sets_menu(): void {
 		add_submenu_page(
 			self::ADMIN_MENU_SLUG,
-			__( 'Tidslinjer', 'arkivtimeline' ),
-			__( 'Tidslinjer', 'arkivtimeline' ),
+			__( 'Tidslinjer', 'prix-historical-timeline' ),
+			__( 'Tidslinjer', 'prix-historical-timeline' ),
 			'edit_posts',
 			'edit-tags.php?taxonomy=' . Timeline_History_Sets::TAXONOMY . '&post_type=timeline_story'
 		);
@@ -61,7 +61,7 @@ class Timeline_History_Settings {
 
 		remove_submenu_page( $parent, 'edit.php?post_type=timeline_story' );
 
-		$import_label = __( 'Import fra Arkiv.dk', 'arkivtimeline' );
+		$import_label = __( 'Import fra Arkiv.dk', 'prix-historical-timeline' );
 		if ( isset( $submenu[ $parent ][0][0] ) ) {
 			$submenu[ $parent ][0][0] = $import_label;
 		}
@@ -171,29 +171,29 @@ class Timeline_History_Settings {
 		$s = self::get();
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'ArkivTimeline – standardindstillinger', 'arkivtimeline' ); ?></h1>
+			<h1><?php esc_html_e( 'Historical Timeline – standardindstillinger', 'prix-historical-timeline' ); ?></h1>
 
 			<p class="description" style="margin:8px 0 16px;">
-				<?php esc_html_e( 'Shortcode til sider:', 'arkivtimeline' ); ?>
+				<?php esc_html_e( 'Shortcode til sider:', 'prix-historical-timeline' ); ?>
 				<code>[timeline_history timeline="slug"]</code>
 				-
-				<?php esc_html_e( 'eller blokken ArkivTimeline. I Studio: kopiér shortcode under den aktive tidslinje; visning via tandhjulet.', 'arkivtimeline' ); ?>
+				<?php esc_html_e( 'eller blokken Historical Timeline. I Studio: kopiér shortcode under den aktive tidslinje; visning via tandhjulet.', 'prix-historical-timeline' ); ?>
 			</p>
 
 			<form method="post" action="options.php">
 				<?php settings_fields( 'timeline_history' ); ?>
 				<table class="form-table">
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Default layout', 'arkivtimeline' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Default layout', 'prix-historical-timeline' ); ?></th>
 						<td>
 							<select name="<?php echo esc_attr( self::OPTION_KEY ); ?>[layout]">
-								<option value="vertical" <?php selected( $s['layout'], 'vertical' ); ?>><?php esc_html_e( 'Vertical', 'arkivtimeline' ); ?></option>
-								<option value="horizontal" <?php selected( $s['layout'], 'horizontal' ); ?>><?php esc_html_e( 'Horizontal', 'arkivtimeline' ); ?></option>
+								<option value="vertical" <?php selected( $s['layout'], 'vertical' ); ?>><?php esc_html_e( 'Vertical', 'prix-historical-timeline' ); ?></option>
+								<option value="horizontal" <?php selected( $s['layout'], 'horizontal' ); ?>><?php esc_html_e( 'Horizontal', 'prix-historical-timeline' ); ?></option>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Default theme', 'arkivtimeline' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Default theme', 'prix-historical-timeline' ); ?></th>
 						<td>
 							<select name="<?php echo esc_attr( self::OPTION_KEY ); ?>[theme]">
 								<?php foreach ( array( 'minimal', 'card', 'editorial' ) as $theme ) : ?>
@@ -205,7 +205,7 @@ class Timeline_History_Settings {
 				</table>
 				<?php submit_button(); ?>
 			</form>
-			<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=timeline-history-builder' ) ); ?>" class="button button-primary"><?php esc_html_e( 'Åbn Studio', 'arkivtimeline' ); ?></a></p>
+			<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=timeline-history-builder' ) ); ?>" class="button button-primary"><?php esc_html_e( 'Åbn Studio', 'prix-historical-timeline' ); ?></a></p>
 		</div>
 		<?php
 	}

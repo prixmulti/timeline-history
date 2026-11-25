@@ -180,7 +180,7 @@ class Timeline_History_Assets {
 		if (root) {
 			root.innerHTML = '<p style="padding:1.25rem;color:#b32d2e;margin:0;">' + msg + '</p>';
 		}
-		console.error('[ArkivTimeline]', msg, {
+		console.error('[Historical Timeline]', msg, {
 			TimelineHistoryBuilder: window.TimelineHistoryBuilder,
 			timelineHistoryAdmin: window.timelineHistoryAdmin
 		});
@@ -241,7 +241,7 @@ class Timeline_History_Assets {
 				run(data.config || cfg, data.stories || [], data.timelines || admin.timelines || []);
 			})
 			.catch(function (err) {
-				console.warn('[ArkivTimeline] REST preview failed, using defaults', err);
+				console.warn('[Historical Timeline] REST preview failed, using defaults', err);
 				run(cfg, [], admin.timelines || []);
 			});
 	}

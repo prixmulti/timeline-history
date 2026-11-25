@@ -169,7 +169,7 @@ class Timeline_History_Story_Repository {
 		}
 		$title = sanitize_text_field( $title_in );
 		if ( '' === $title ) {
-			return new WP_Error( 'th_missing_title', __( 'Titel er påkrævet.', 'arkivtimeline' ), array( 'status' => 400 ) );
+			return new WP_Error( 'th_missing_title', __( 'Titel er påkrævet.', 'prix-historical-timeline' ), array( 'status' => 400 ) );
 		}
 
 		$excerpt_in = isset( $data['excerpt'] ) ? (string) $data['excerpt'] : '';
@@ -192,7 +192,7 @@ class Timeline_History_Story_Repository {
 		if ( $id ) {
 			$existing = get_post( $id );
 			if ( ! $existing || 'timeline_story' !== $existing->post_type ) {
-				return new WP_Error( 'th_not_found', __( 'Historie findes ikke.', 'arkivtimeline' ), array( 'status' => 404 ) );
+				return new WP_Error( 'th_not_found', __( 'Historie findes ikke.', 'prix-historical-timeline' ), array( 'status' => 404 ) );
 			}
 			$postarr['ID'] = $id;
 			$result        = wp_update_post( $postarr, true );
@@ -294,11 +294,11 @@ class Timeline_History_Story_Repository {
 	public static function delete( int $id ) {
 		$post = get_post( $id );
 		if ( ! $post || 'timeline_story' !== $post->post_type ) {
-			return new WP_Error( 'th_not_found', __( 'Historie findes ikke.', 'arkivtimeline' ), array( 'status' => 404 ) );
+			return new WP_Error( 'th_not_found', __( 'Historie findes ikke.', 'prix-historical-timeline' ), array( 'status' => 404 ) );
 		}
 		$deleted = wp_delete_post( $id, true );
 		if ( ! $deleted ) {
-			return new WP_Error( 'th_delete_failed', __( 'Kunne ikke slette historien.', 'arkivtimeline' ), array( 'status' => 500 ) );
+			return new WP_Error( 'th_delete_failed', __( 'Kunne ikke slette historien.', 'prix-historical-timeline' ), array( 'status' => 500 ) );
 		}
 		return true;
 	}

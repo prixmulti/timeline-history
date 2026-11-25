@@ -175,7 +175,7 @@ class Timeline_History_Stories_Controller {
 		if ( $timeline === '' ) {
 			return new WP_Error(
 				'th_timeline_required',
-				__( 'Vælg en tidslinje før visning gemmes.', 'arkivtimeline' ),
+				__( 'Vælg en tidslinje før visning gemmes.', 'prix-historical-timeline' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -184,7 +184,7 @@ class Timeline_History_Stories_Controller {
 		if ( ! $set ) {
 			return new WP_Error(
 				'th_timeline_unknown',
-				__( 'Ukendt tidslinje.', 'arkivtimeline' ),
+				__( 'Ukendt tidslinje.', 'prix-historical-timeline' ),
 				array( 'status' => 404 )
 			);
 		}

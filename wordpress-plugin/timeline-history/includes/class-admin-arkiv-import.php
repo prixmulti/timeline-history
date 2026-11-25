@@ -52,7 +52,7 @@ class Timeline_History_Admin_Arkiv_Import {
 
 	public function ajax_preview(): void {
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Ingen adgang.', 'arkivtimeline' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'Ingen adgang.', 'prix-historical-timeline' ) ), 403 );
 		}
 		check_ajax_referer( 'th_arkiv_admin', 'nonce' );
 		// phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- long-running arkiv.dk preview fetch.
@@ -71,7 +71,7 @@ class Timeline_History_Admin_Arkiv_Import {
 
 		if ( $url === '' ) {
 			wp_send_json_error(
-				array( 'message' => __( 'Vælg et lokalarkiv før du fortsætter.', 'arkivtimeline' ) )
+				array( 'message' => __( 'Vælg et lokalarkiv før du fortsætter.', 'prix-historical-timeline' ) )
 			);
 		}
 
@@ -109,7 +109,7 @@ class Timeline_History_Admin_Arkiv_Import {
 
 	public function ajax_import(): void {
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Ingen adgang.', 'arkivtimeline' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'Ingen adgang.', 'prix-historical-timeline' ) ), 403 );
 		}
 		check_ajax_referer( 'th_arkiv_admin', 'nonce' );
 		// phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- long-running arkiv.dk preview fetch.
@@ -204,13 +204,13 @@ class Timeline_History_Admin_Arkiv_Import {
 		array $selected
 	 ) {
 		if ( $timeline_name === '' ) {
-			return new WP_Error( 'th_timeline', __( 'Angiv et navn til tidslinjen før import.', 'arkivtimeline' ) );
+			return new WP_Error( 'th_timeline', __( 'Angiv et navn til tidslinjen før import.', 'prix-historical-timeline' ) );
 		}
 		if ( empty( $selected ) ) {
-			return new WP_Error( 'th_select', __( 'Vælg mindst én post at importere.', 'arkivtimeline' ) );
+			return new WP_Error( 'th_select', __( 'Vælg mindst én post at importere.', 'prix-historical-timeline' ) );
 		}
 		if ( $url === '' ) {
-			return new WP_Error( 'th_url', __( 'Manglende søgelink. Vælg lokalarkiv og hent forhåndsvisning igen.', 'arkivtimeline' ) );
+			return new WP_Error( 'th_url', __( 'Manglende søgelink. Vælg lokalarkiv og hent forhåndsvisning igen.', 'prix-historical-timeline' ) );
 		}
 
 		$cached = get_transient( $this->preview_key() );
@@ -222,7 +222,7 @@ class Timeline_History_Admin_Arkiv_Import {
 		if ( is_array( $cached ) && ! empty( $cached['stamp'] ) && $cached['stamp'] !== $stamp ) {
 			return new WP_Error(
 				'th_stale',
-				__( 'Søgningen er ændret siden forhåndsvisningen. Hent forhåndsvisning igen, før du importerer.', 'arkivtimeline' )
+				__( 'Søgningen er ændret siden forhåndsvisningen. Hent forhåndsvisning igen, før du importerer.', 'prix-historical-timeline' )
 			);
 		}
 
@@ -272,7 +272,7 @@ class Timeline_History_Admin_Arkiv_Import {
 			}
 		}
 		if ( empty( $chosen ) ) {
-			return new WP_Error( 'th_chosen', __( 'De valgte poster fandtes ikke i forhåndsvisningen. Hent forhåndsvisning igen.', 'arkivtimeline' ) );
+			return new WP_Error( 'th_chosen', __( 'De valgte poster fandtes ikke i forhåndsvisningen. Hent forhåndsvisning igen.', 'prix-historical-timeline' ) );
 		}
 
 		$import = Timeline_History_Arkiv_Client::import_items( $chosen, $timeline_name, $import_max );
@@ -300,7 +300,7 @@ class Timeline_History_Admin_Arkiv_Import {
 	private static function empty_search_message(): string {
 		return __(
 			'Arkiv.dk returnerede ingen poster med den valgte søgning. Prøv et andet lokalarkiv, færre søgeord eller et bredere årsinterval.',
-			'arkivtimeline'
+			'prix-historical-timeline'
 		);
 	}
 
@@ -327,7 +327,7 @@ class Timeline_History_Admin_Arkiv_Import {
 
 	public function ajax_search_archives(): void {
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Ingen adgang.', 'arkivtimeline' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'Ingen adgang.', 'prix-historical-timeline' ) ), 403 );
 		}
 		check_ajax_referer( 'th_arkiv_admin', 'nonce' );
 		$term = isset( $_GET['term'] ) ? sanitize_text_field( wp_unslash( (string) $_GET['term'] ) ) : '';
@@ -433,8 +433,8 @@ class Timeline_History_Admin_Arkiv_Import {
 		$slug = Timeline_History_Settings::ADMIN_MENU_SLUG;
 
 		add_menu_page(
-			__( 'ArkivTimeline', 'arkivtimeline' ),
-			__( 'ArkivTimeline', 'arkivtimeline' ),
+			__( 'Historical Timeline', 'prix-historical-timeline' ),
+			__( 'Historical Timeline', 'prix-historical-timeline' ),
 			'edit_posts',
 			$slug,
 			array( $this, 'render' ),
@@ -444,8 +444,8 @@ class Timeline_History_Admin_Arkiv_Import {
 
 		add_submenu_page(
 			$slug,
-			__( 'Import fra Arkiv.dk', 'arkivtimeline' ),
-			__( 'Import fra Arkiv.dk', 'arkivtimeline' ),
+			__( 'Import fra Arkiv.dk', 'prix-historical-timeline' ),
+			__( 'Import fra Arkiv.dk', 'prix-historical-timeline' ),
 			'edit_posts',
 			$slug,
 			array( $this, 'render' )
@@ -538,7 +538,7 @@ class Timeline_History_Admin_Arkiv_Import {
 					$to_i
 				);
 			} else {
-				$error = __( 'Forhåndsvisningen findes ikke længere. Hent forhåndsvisning igen.', 'arkivtimeline' );
+				$error = __( 'Forhåndsvisningen findes ikke længere. Hent forhåndsvisning igen.', 'prix-historical-timeline' );
 			}
 		}
 
@@ -563,7 +563,7 @@ class Timeline_History_Admin_Arkiv_Import {
 			$from          = isset( $_POST['th_arkiv_from'] ) ? sanitize_text_field( wp_unslash( $_POST['th_arkiv_from'] ) ) : '';
 			$to            = isset( $_POST['th_arkiv_to'] ) ? sanitize_text_field( wp_unslash( $_POST['th_arkiv_to'] ) ) : '';
 			$timeline_name = isset( $_POST['th_arkiv_timeline'] ) ? sanitize_text_field( wp_unslash( $_POST['th_arkiv_timeline'] ) ) : '';
-			$error         = __( 'Handlingen blev ikke sendt korrekt (prøv igen). Opdater siden hvis problemet fortsætter.', 'arkivtimeline' );
+			$error         = __( 'Handlingen blev ikke sendt korrekt (prøv igen). Opdater siden hvis problemet fortsætter.', 'prix-historical-timeline' );
 		} elseif ( isset( $_POST['th_arkiv_action'] ) ) {
 			check_admin_referer( 'th_arkiv_import' );
 			$resolved      = $this->resolve_posted_search();
@@ -580,7 +580,7 @@ class Timeline_History_Admin_Arkiv_Import {
 
 			if ( 'preview' === $action ) {
 				if ( $url === '' ) {
-					$error = __( 'Vælg et lokalarkiv (søg efter navn) før du henter forhåndsvisning.', 'arkivtimeline' );
+					$error = __( 'Vælg et lokalarkiv (søg efter navn) før du henter forhåndsvisning.', 'prix-historical-timeline' );
 					delete_transient( $this->preview_key() );
 					$result = null;
 				} else {
@@ -615,17 +615,17 @@ class Timeline_History_Admin_Arkiv_Import {
 				$selected = array_values( array_filter( $selected ) );
 
 				if ( $timeline_name === '' ) {
-					$error = __( 'Angiv et navn til tidslinjen før import.', 'arkivtimeline' );
+					$error = __( 'Angiv et navn til tidslinjen før import.', 'prix-historical-timeline' );
 				} elseif ( empty( $selected ) ) {
-					$error = __( 'Vælg mindst én post at importere.', 'arkivtimeline' );
+					$error = __( 'Vælg mindst én post at importere.', 'prix-historical-timeline' );
 				} elseif ( $url === '' ) {
-					$error = __( 'Manglende søgelink. Vælg lokalarkiv og hent forhåndsvisning igen.', 'arkivtimeline' );
+					$error = __( 'Manglende søgelink. Vælg lokalarkiv og hent forhåndsvisning igen.', 'prix-historical-timeline' );
 				} else {
 					$cached           = get_transient( $this->preview_key() );
 					$items            = array();
 
 					if ( is_array( $cached ) && ! empty( $cached['stamp'] ) && $cached['stamp'] !== $this->preview_stamp( $url, $from_i, $to_i, $max_gallery, $probe_all_counts ) ) {
-						$error = __( 'Søgningen er ændret siden forhåndsvisningen. Hent forhåndsvisning igen, før du importerer.', 'arkivtimeline' );
+						$error = __( 'Søgningen er ændret siden forhåndsvisningen. Hent forhåndsvisning igen, før du importerer.', 'prix-historical-timeline' );
 						$cached = null;
 					}
 
@@ -679,7 +679,7 @@ class Timeline_History_Admin_Arkiv_Import {
 						}
 
 						if ( empty( $chosen ) ) {
-							$error = __( 'De valgte poster fandtes ikke i forhåndsvisningen. Hent forhåndsvisning igen.', 'arkivtimeline' );
+							$error = __( 'De valgte poster fandtes ikke i forhåndsvisningen. Hent forhåndsvisning igen.', 'prix-historical-timeline' );
 						} else {
 							$import = Timeline_History_Arkiv_Client::import_items( $chosen, $timeline_name, $import_max );
 							if ( is_wp_error( $import ) ) {
@@ -724,7 +724,7 @@ class Timeline_History_Admin_Arkiv_Import {
 		?>
 		<div class="wrap th-arkiv-page">
 			<div class="th-studio-header">
-				<h1><?php esc_html_e( 'Import fra Arkiv.dk', 'arkivtimeline' ); ?></h1>
+				<h1><?php esc_html_e( 'Import fra Arkiv.dk', 'prix-historical-timeline' ); ?></h1>
 			</div>
 
 			<?php if ( $error ) : ?>
@@ -738,7 +738,7 @@ class Timeline_History_Admin_Arkiv_Import {
 						echo esc_html(
 							sprintf(
 								/* translators: 1: created, 2: updated, 3: skipped */
-								__( 'Import færdig: %1$d oprettet, %2$d opdateret, %3$d sprunget over.', 'arkivtimeline' ),
+								__( 'Import færdig: %1$d oprettet, %2$d opdateret, %3$d sprunget over.', 'prix-historical-timeline' ),
 								(int) $import_notice['created'],
 								(int) $import_notice['updated'],
 								(int) $import_notice['skipped']
@@ -747,11 +747,11 @@ class Timeline_History_Admin_Arkiv_Import {
 						?>
 					</p>
 					<p style="margin:0;">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=timeline-history-builder' ) ); ?>"><?php esc_html_e( 'Åbn Studio', 'arkivtimeline' ); ?></a>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=timeline-history-builder' ) ); ?>"><?php esc_html_e( 'Åbn Studio', 'prix-historical-timeline' ); ?></a>
 					</p>
 					<?php if ( ! empty( $import_notice['timeline'] ) ) : ?>
 						<p class="th-studio__shortcode th-studio__shortcode--compact" style="margin-top:0.65rem;">
-							<span class="th-studio__shortcode-label"><?php esc_html_e( 'Shortcode', 'arkivtimeline' ); ?></span>
+							<span class="th-studio__shortcode-label"><?php esc_html_e( 'Shortcode', 'prix-historical-timeline' ); ?></span>
 							<code class="th-studio__embed-code th-studio__embed-code--inline">[timeline_history timeline="<?php echo esc_attr( $import_notice['timeline'] ); ?>"]</code>
 						</p>
 					<?php endif; ?>
@@ -765,7 +765,7 @@ class Timeline_History_Admin_Arkiv_Import {
 						echo esc_html(
 							sprintf(
 								/* translators: 1: created, 2: updated (image/text), 3: skipped */
-								__( 'Import færdig: %1$d oprettet, %2$d opdateret (større billede/tekst), %3$d sprunget over.', 'arkivtimeline' ),
+								__( 'Import færdig: %1$d oprettet, %2$d opdateret (større billede/tekst), %3$d sprunget over.', 'prix-historical-timeline' ),
 								(int) $import['created'],
 								isset( $import['updated'] ) ? (int) $import['updated'] : 0,
 								(int) $import['skipped']
@@ -773,10 +773,10 @@ class Timeline_History_Admin_Arkiv_Import {
 						);
 						?>
 					</p>
-					<p style="margin:0;"><a href="<?php echo esc_url( admin_url( 'admin.php?page=timeline-history-builder' ) ); ?>"><?php esc_html_e( 'Åbn Studio', 'arkivtimeline' ); ?></a></p>
+					<p style="margin:0;"><a href="<?php echo esc_url( admin_url( 'admin.php?page=timeline-history-builder' ) ); ?>"><?php esc_html_e( 'Åbn Studio', 'prix-historical-timeline' ); ?></a></p>
 					<?php if ( ! empty( $import['timeline']['slug'] ) ) : ?>
 						<p class="th-studio__shortcode th-studio__shortcode--compact" style="margin-top:0.65rem;">
-							<span class="th-studio__shortcode-label"><?php esc_html_e( 'Shortcode', 'arkivtimeline' ); ?></span>
+							<span class="th-studio__shortcode-label"><?php esc_html_e( 'Shortcode', 'prix-historical-timeline' ); ?></span>
 							<code class="th-studio__embed-code th-studio__embed-code--inline">[timeline_history timeline="<?php echo esc_attr( $import['timeline']['slug'] ); ?>"]</code>
 						</p>
 					<?php endif; ?>
@@ -799,15 +799,15 @@ class Timeline_History_Admin_Arkiv_Import {
 			<div id="th-arkiv-busy-bootstrap" class="th-arkiv-busy" hidden aria-hidden="true">
 				<div class="th-arkiv-busy__panel" role="status">
 					<span class="spinner is-active" aria-hidden="true"></span>
-					<p class="th-arkiv-busy__title"><?php esc_html_e( 'Indlæser…', 'arkivtimeline' ); ?></p>
-					<p class="th-arkiv-busy__detail"><?php esc_html_e( 'Vent mens siden opdateres.', 'arkivtimeline' ); ?></p>
+					<p class="th-arkiv-busy__title"><?php esc_html_e( 'Indlæser…', 'prix-historical-timeline' ); ?></p>
+					<p class="th-arkiv-busy__detail"><?php esc_html_e( 'Vent mens siden opdateres.', 'prix-historical-timeline' ); ?></p>
 				</div>
 			</div>
 			<div id="th-arkiv-busy" class="th-arkiv-busy" hidden aria-live="polite" aria-busy="false" aria-hidden="true">
 				<div class="th-arkiv-busy__panel" role="status">
 					<span class="spinner is-active" aria-hidden="true"></span>
-					<p class="th-arkiv-busy__title" id="th-arkiv-busy-title"><?php esc_html_e( 'Arbejder…', 'arkivtimeline' ); ?></p>
-					<p class="th-arkiv-busy__detail" id="th-arkiv-busy-detail"><?php esc_html_e( 'Det kan tage flere minutter ved mange poster. Lad fanen stå åben.', 'arkivtimeline' ); ?></p>
+					<p class="th-arkiv-busy__title" id="th-arkiv-busy-title"><?php esc_html_e( 'Arbejder…', 'prix-historical-timeline' ); ?></p>
+					<p class="th-arkiv-busy__detail" id="th-arkiv-busy-detail"><?php esc_html_e( 'Det kan tage flere minutter ved mange poster. Lad fanen stå åben.', 'prix-historical-timeline' ); ?></p>
 					<span class="th-arkiv-busy__count" id="th-arkiv-busy-count" hidden></span>
 					<p class="th-arkiv-busy__detail" id="th-arkiv-busy-elapsed" style="margin-top:0.5rem;font-variant-numeric:tabular-nums;"></p>
 				</div>
@@ -821,53 +821,53 @@ class Timeline_History_Admin_Arkiv_Import {
 						<input type="hidden" name="th_arkiv_archive_label" id="th_arkiv_archive_label" value="<?php echo esc_attr( $archive_label ); ?>" />
 						<div class="th-studio__card">
 							<div class="th-studio__card-head">
-								<h2><?php esc_html_e( 'Søgning', 'arkivtimeline' ); ?></h2>
+								<h2><?php esc_html_e( 'Søgning', 'prix-historical-timeline' ); ?></h2>
 								<span class="th-studio__pill">arkiv.dk</span>
 							</div>
 
 							<div class="th-sf-field">
-								<label class="th-sf-field__label" for="th_arkiv_archive_query"><?php esc_html_e( 'Lokalarkiv', 'arkivtimeline' ); ?></label>
+								<label class="th-sf-field__label" for="th_arkiv_archive_query"><?php esc_html_e( 'Lokalarkiv', 'prix-historical-timeline' ); ?></label>
 								<div id="th_arkiv_archive_selected" class="th-arkiv-archive-selected" <?php echo $archive_id > 0 && $archive_label !== '' ? '' : 'hidden'; ?>>
 									<strong id="th_arkiv_archive_selected_name"><?php echo esc_html( $archive_label ); ?></strong>
-									<button type="button" class="th-link-btn" id="th_arkiv_archive_clear" style="margin:0;"><?php esc_html_e( 'Skift arkiv', 'arkivtimeline' ); ?></button>
+									<button type="button" class="th-link-btn" id="th_arkiv_archive_clear" style="margin:0;"><?php esc_html_e( 'Skift arkiv', 'prix-historical-timeline' ); ?></button>
 								</div>
 								<div id="th_arkiv_archive_search_wrap" <?php echo $archive_id > 0 && $archive_label !== '' ? 'hidden' : ''; ?>>
 									<input type="search" id="th_arkiv_archive_query" autocomplete="off"
-										placeholder="<?php esc_attr_e( 'Skriv mindst 2 bogstaver (fx Ansager)…', 'arkivtimeline' ); ?>" />
+										placeholder="<?php esc_attr_e( 'Skriv mindst 2 bogstaver (fx Ansager)…', 'prix-historical-timeline' ); ?>" />
 									<ul id="th_arkiv_archive_results" class="th-arkiv-archive-results" hidden></ul>
 								</div>
 							</div>
 
 							<div class="th-sf-field">
-								<label class="th-sf-field__label" for="th_arkiv_search"><?php esc_html_e( 'Søgeord (valgfrit)', 'arkivtimeline' ); ?></label>
+								<label class="th-sf-field__label" for="th_arkiv_search"><?php esc_html_e( 'Søgeord (valgfrit)', 'prix-historical-timeline' ); ?></label>
 								<input type="search" name="th_arkiv_search" id="th_arkiv_search" value="<?php echo esc_attr( $search_string ); ?>" />
-								<p class="th-sf-field__hint"><?php esc_html_e( 'Tom = alle billeder i det valgte lokalarkiv.', 'arkivtimeline' ); ?></p>
+								<p class="th-sf-field__hint"><?php esc_html_e( 'Tom = alle billeder i det valgte lokalarkiv.', 'prix-historical-timeline' ); ?></p>
 							</div>
 
 							<div class="th-sf-field" id="th_arkiv_url_row">
-								<label class="th-sf-field__label" for="th_arkiv_url"><?php esc_html_e( 'Søgelink', 'arkivtimeline' ); ?></label>
+								<label class="th-sf-field__label" for="th_arkiv_url"><?php esc_html_e( 'Søgelink', 'prix-historical-timeline' ); ?></label>
 								<input type="url" name="th_arkiv_url" id="th_arkiv_url" readonly
 									value="<?php echo esc_attr( $url ); ?>"
-									placeholder="<?php esc_attr_e( 'Vises når du har valgt lokalarkiv', 'arkivtimeline' ); ?>" />
+									placeholder="<?php esc_attr_e( 'Vises når du har valgt lokalarkiv', 'prix-historical-timeline' ); ?>" />
 							</div>
 
 							<div class="th-sf-field">
-								<span class="th-sf-field__label"><?php esc_html_e( 'Årstal (valgfrit)', 'arkivtimeline' ); ?></span>
+								<span class="th-sf-field__label"><?php esc_html_e( 'Årstal (valgfrit)', 'prix-historical-timeline' ); ?></span>
 								<div class="th-arkiv-field-row">
 									<label>
-										<?php esc_html_e( 'Fra', 'arkivtimeline' ); ?>
+										<?php esc_html_e( 'Fra', 'prix-historical-timeline' ); ?>
 										<input type="number" name="th_arkiv_from" min="1000" max="2100" value="<?php echo esc_attr( $from ); ?>" />
 									</label>
 									<label>
-										<?php esc_html_e( 'Til', 'arkivtimeline' ); ?>
+										<?php esc_html_e( 'Til', 'prix-historical-timeline' ); ?>
 										<input type="number" name="th_arkiv_to" min="1000" max="2100" value="<?php echo esc_attr( $to ); ?>" />
 									</label>
 								</div>
 							</div>
 
-							<button type="submit" class="th-sf-btn th-sf-btn--secondary th-sf-btn--block" data-th-arkiv-action="preview"><?php esc_html_e( 'Hent forhåndsvisning', 'arkivtimeline' ); ?></button>
+							<button type="submit" class="th-sf-btn th-sf-btn--secondary th-sf-btn--block" data-th-arkiv-action="preview"><?php esc_html_e( 'Hent forhåndsvisning', 'prix-historical-timeline' ); ?></button>
 							<div id="th-arkiv-stale-notice" class="th-arkiv-stale-notice" hidden>
-								<?php esc_html_e( 'Du har ændret søgningen. Hent forhåndsvisning igen.', 'arkivtimeline' ); ?>
+								<?php esc_html_e( 'Du har ændret søgningen. Hent forhåndsvisning igen.', 'prix-historical-timeline' ); ?>
 							</div>
 						</div>
 				</div>
@@ -924,7 +924,7 @@ class Timeline_History_Admin_Arkiv_Import {
 							if (busyCount) {
 								if (count > 0) {
 									busyCount.hidden = false;
-									busyCount.textContent = count + ' <?php echo esc_js( __( 'poster', 'arkivtimeline' ) ); ?>';
+									busyCount.textContent = count + ' <?php echo esc_js( __( 'poster', 'prix-historical-timeline' ) ); ?>';
 								} else {
 									busyCount.hidden = true;
 									busyCount.textContent = '';
@@ -966,12 +966,12 @@ class Timeline_History_Admin_Arkiv_Import {
 									}
 									hideBusy();
 									var msg = (json && json.data && json.data.message) ? json.data.message
-										: '<?php echo esc_js( __( 'Noget gik galt. Prøv igen.', 'arkivtimeline' ) ); ?>';
+										: '<?php echo esc_js( __( 'Noget gik galt. Prøv igen.', 'prix-historical-timeline' ) ); ?>';
 									window.alert(msg);
 								})
 								.catch(function () {
 									hideBusy();
-									window.alert('<?php echo esc_js( __( 'Forbindelsen til serveren mislykkedes. Prøv igen.', 'arkivtimeline' ) ); ?>');
+									window.alert('<?php echo esc_js( __( 'Forbindelsen til serveren mislykkedes. Prøv igen.', 'prix-historical-timeline' ) ); ?>');
 								});
 						}
 
@@ -1026,7 +1026,7 @@ class Timeline_History_Admin_Arkiv_Import {
 								}
 								if (!action) {
 									ev.preventDefault();
-									window.alert('<?php echo esc_js( __( 'Vælg en handling (forhåndsvisning eller import).', 'arkivtimeline' ) ); ?>');
+									window.alert('<?php echo esc_js( __( 'Vælg en handling (forhåndsvisning eller import).', 'prix-historical-timeline' ) ); ?>');
 									return;
 								}
 								if (action === 'import' || action === 'preview') {
@@ -1034,31 +1034,31 @@ class Timeline_History_Admin_Arkiv_Import {
 									var archiveId = document.getElementById('th_arkiv_archive');
 									var hasArchive = archiveId && archiveId.value;
 									if (!hasArchive) {
-										window.alert('<?php echo esc_js( __( 'Vælg et lokalarkiv før du fortsætter.', 'arkivtimeline' ) ); ?>');
+										window.alert('<?php echo esc_js( __( 'Vælg et lokalarkiv før du fortsætter.', 'prix-historical-timeline' ) ); ?>');
 										return;
 									}
 									if (action === 'import') {
 										var selected = form.querySelectorAll('.th-arkiv-pick:checked:not(:disabled)').length;
 										if (!selected) {
-											window.alert('<?php echo esc_js( __( 'Vælg mindst én post at importere.', 'arkivtimeline' ) ); ?>');
+											window.alert('<?php echo esc_js( __( 'Vælg mindst én post at importere.', 'prix-historical-timeline' ) ); ?>');
 											return;
 										}
 										var timelineEl = document.getElementById('th_arkiv_timeline');
 										if (!timelineEl || !timelineEl.value.trim()) {
-											window.alert('<?php echo esc_js( __( 'Angiv et navn til tidslinjen før import.', 'arkivtimeline' ) ); ?>');
+											window.alert('<?php echo esc_js( __( 'Angiv et navn til tidslinjen før import.', 'prix-historical-timeline' ) ); ?>');
 											return;
 										}
 										runAjaxJob(
 											'import',
-											'<?php echo esc_js( __( 'Importerer valgte poster…', 'arkivtimeline' ) ); ?>',
-											'<?php echo esc_js( __( 'Henter visningsbilleder og tekst fra arkiv.dk. Lad fanen stå åben.', 'arkivtimeline' ) ); ?>',
+											'<?php echo esc_js( __( 'Importerer valgte poster…', 'prix-historical-timeline' ) ); ?>',
+											'<?php echo esc_js( __( 'Henter visningsbilleder og tekst fra arkiv.dk. Lad fanen stå åben.', 'prix-historical-timeline' ) ); ?>',
 											selected
 										);
 									} else {
 										runAjaxJob(
 											'preview',
-											'<?php echo esc_js( __( 'Henter forhåndsvisning…', 'arkivtimeline' ) ); ?>',
-											'<?php echo esc_js( __( 'Henter søgeresultater fra arkiv.dk. Det kan tage lang tid ved store arkiver.', 'arkivtimeline' ) ); ?>',
+											'<?php echo esc_js( __( 'Henter forhåndsvisning…', 'prix-historical-timeline' ) ); ?>',
+											'<?php echo esc_js( __( 'Henter søgeresultater fra arkiv.dk. Det kan tage lang tid ved store arkiver.', 'prix-historical-timeline' ) ); ?>',
 											0
 										);
 									}
@@ -1148,7 +1148,7 @@ class Timeline_History_Admin_Arkiv_Import {
 								var btn = document.createElement('button');
 								btn.type = 'button';
 								btn.disabled = true;
-								btn.textContent = '<?php echo esc_js( __( 'Ingen arkiver fundet', 'arkivtimeline' ) ); ?>';
+								btn.textContent = '<?php echo esc_js( __( 'Ingen arkiver fundet', 'prix-historical-timeline' ) ); ?>';
 								li.appendChild(btn);
 								archiveResults.appendChild(li);
 							} else {
@@ -1207,16 +1207,16 @@ class Timeline_History_Admin_Arkiv_Import {
 					<div class="th-studio__card-head th-arkiv-preview-head">
 						<div class="th-arkiv-preview-head__main">
 							<div class="th-arkiv-preview-head__title">
-								<h2><?php esc_html_e( 'Forhåndsvisning', 'arkivtimeline' ); ?></h2>
+								<h2><?php esc_html_e( 'Forhåndsvisning', 'prix-historical-timeline' ); ?></h2>
 								<span class="th-studio__pill"><?php echo (int) $shown; ?></span>
 							</div>
 						</div>
 						<div class="th-arkiv-import-actions">
 							<label class="th-arkiv-timeline-field" for="th_arkiv_timeline">
-								<span class="th-arkiv-timeline-field__label"><?php esc_html_e( 'Tidslinjenavn', 'arkivtimeline' ); ?></span>
+								<span class="th-arkiv-timeline-field__label"><?php esc_html_e( 'Tidslinjenavn', 'prix-historical-timeline' ); ?></span>
 								<input type="text" name="th_arkiv_timeline" id="th_arkiv_timeline" class="th-arkiv-timeline-field__input" list="th-arkiv-timelines"
 									value="<?php echo esc_attr( $timeline_name ); ?>"
-									placeholder="<?php esc_attr_e( 'Fx. Ansager 1940-1942', 'arkivtimeline' ); ?>"
+									placeholder="<?php esc_attr_e( 'Fx. Ansager 1940-1942', 'prix-historical-timeline' ); ?>"
 									autocomplete="off" />
 							</label>
 							<?php if ( ! empty( $existing_sets ) ) : ?>
@@ -1227,27 +1227,27 @@ class Timeline_History_Admin_Arkiv_Import {
 								</datalist>
 							<?php endif; ?>
 							<button type="submit" class="th-sf-btn" data-th-arkiv-action="import">
-								<?php esc_html_e( 'Importér valgte', 'arkivtimeline' ); ?>
+								<?php esc_html_e( 'Importér valgte', 'prix-historical-timeline' ); ?>
 							</button>
 						</div>
 					</div>
-					<p class="th-sf-field__hint"><?php esc_html_e( 'Vælg poster, angiv tidslinjenavn og importér. Billederne forbliver eksterne links til arkiv.dk.', 'arkivtimeline' ); ?></p>
-					<div class="th-arkiv-select" role="group" aria-label="<?php esc_attr_e( 'Markering', 'arkivtimeline' ); ?>">
+					<p class="th-sf-field__hint"><?php esc_html_e( 'Vælg poster, angiv tidslinjenavn og importér. Billederne forbliver eksterne links til arkiv.dk.', 'prix-historical-timeline' ); ?></p>
+					<div class="th-arkiv-select" role="group" aria-label="<?php esc_attr_e( 'Markering', 'prix-historical-timeline' ); ?>">
 						<?php if ( $has_year_filter ) : ?>
-							<button type="button" class="th-sf-btn th-sf-btn--secondary" id="th-arkiv-sel-precise"><?php esc_html_e( 'Kun præcise', 'arkivtimeline' ); ?></button>
-							<button type="button" class="th-sf-btn th-sf-btn--secondary" id="th-arkiv-sel-fuzzy"><?php esc_html_e( '+ upræcise', 'arkivtimeline' ); ?></button>
+							<button type="button" class="th-sf-btn th-sf-btn--secondary" id="th-arkiv-sel-precise"><?php esc_html_e( 'Kun præcise', 'prix-historical-timeline' ); ?></button>
+							<button type="button" class="th-sf-btn th-sf-btn--secondary" id="th-arkiv-sel-fuzzy"><?php esc_html_e( '+ upræcise', 'prix-historical-timeline' ); ?></button>
 						<?php endif; ?>
-						<button type="button" class="th-sf-btn th-sf-btn--secondary" id="th-arkiv-sel-all"><?php esc_html_e( 'Alle', 'arkivtimeline' ); ?></button>
-						<button type="button" class="th-sf-btn th-sf-btn--secondary" id="th-arkiv-sel-none"><?php esc_html_e( 'Ingen', 'arkivtimeline' ); ?></button>
+						<button type="button" class="th-sf-btn th-sf-btn--secondary" id="th-arkiv-sel-all"><?php esc_html_e( 'Alle', 'prix-historical-timeline' ); ?></button>
+						<button type="button" class="th-sf-btn th-sf-btn--secondary" id="th-arkiv-sel-none"><?php esc_html_e( 'Ingen', 'prix-historical-timeline' ); ?></button>
 						<span class="th-sf-field__hint" id="th-arkiv-sel-count"></span>
 					</div>
 					<div class="th-arkiv-table-wrap"><table class="th-arkiv-table" id="th-arkiv-table">
 						<thead>
 							<tr>
 								<th style="width:36px;"></th>
-								<th style="width:72px;"><?php esc_html_e( 'Billede', 'arkivtimeline' ); ?></th>
-								<th><?php esc_html_e( 'Titel', 'arkivtimeline' ); ?></th>
-								<th style="width:140px;"><?php esc_html_e( 'År', 'arkivtimeline' ); ?></th>
+								<th style="width:72px;"><?php esc_html_e( 'Billede', 'prix-historical-timeline' ); ?></th>
+								<th><?php esc_html_e( 'Titel', 'prix-historical-timeline' ); ?></th>
+								<th style="width:140px;"><?php esc_html_e( 'År', 'prix-historical-timeline' ); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -1281,10 +1281,10 @@ class Timeline_History_Admin_Arkiv_Import {
 										<div class="th-arkiv-title-line">
 											<strong><?php echo esc_html( $item['title'] ); ?></strong>
 											<?php if ( $is_series ) : ?>
-												<span class="th-arkiv-pill th-arkiv-pill--series"><?php esc_html_e( 'Serie', 'arkivtimeline' ); ?></span>
+												<span class="th-arkiv-pill th-arkiv-pill--series"><?php esc_html_e( 'Serie', 'prix-historical-timeline' ); ?></span>
 											<?php endif; ?>
 										</div>
-										<a href="<?php echo esc_url( $item['source_url'] ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Åbn på arkiv.dk', 'arkivtimeline' ); ?></a>
+										<a href="<?php echo esc_url( $item['source_url'] ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Åbn på arkiv.dk', 'prix-historical-timeline' ); ?></a>
 									</td>
 									<td class="th-arkiv-year">
 										<?php echo esc_html( $year_txt ); ?>

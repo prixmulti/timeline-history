@@ -31,12 +31,12 @@ class Timeline_History_Arkiv_Client {
 	public static function build_search_url( string $url, ?int $from, ?int $to, int $page = 1 ): string|WP_Error {
 		$url = trim( $url );
 		if ( $url === '' ) {
-			return new WP_Error( 'th_arkiv_url', __( 'Indsæt et arkiv.dk-søgelink.', 'arkivtimeline' ) );
+			return new WP_Error( 'th_arkiv_url', __( 'Indsæt et arkiv.dk-søgelink.', 'prix-historical-timeline' ) );
 		}
 
 		$parts = wp_parse_url( $url );
 		if ( empty( $parts['host'] ) || false === stripos( (string) $parts['host'], 'arkiv.dk' ) ) {
-			return new WP_Error( 'th_arkiv_host', __( 'Linket skal pege på arkiv.dk.', 'arkivtimeline' ) );
+			return new WP_Error( 'th_arkiv_host', __( 'Linket skal pege på arkiv.dk.', 'prix-historical-timeline' ) );
 		}
 
 		$query = array();
@@ -261,7 +261,7 @@ class Timeline_History_Arkiv_Client {
 				'th_arkiv_archives_http',
 				sprintf(
 					/* translators: %d: HTTP status */
-					__( 'Kunne ikke hente arkivlisten fra arkiv.dk (HTTP %d).', 'arkivtimeline' ),
+					__( 'Kunne ikke hente arkivlisten fra arkiv.dk (HTTP %d).', 'prix-historical-timeline' ),
 					$code
 				)
 			);
@@ -269,7 +269,7 @@ class Timeline_History_Arkiv_Client {
 
 		$data = json_decode( $body, true );
 		if ( ! is_array( $data ) || ! isset( $data['Results'] ) || ! is_array( $data['Results'] ) ) {
-			return new WP_Error( 'th_arkiv_archives_json', __( 'Ugyldigt svar fra arkiv.dk (arkivliste).', 'arkivtimeline' ) );
+			return new WP_Error( 'th_arkiv_archives_json', __( 'Ugyldigt svar fra arkiv.dk (arkivliste).', 'prix-historical-timeline' ) );
 		}
 
 		return array(
@@ -312,7 +312,7 @@ class Timeline_History_Arkiv_Client {
 				'th_arkiv_http',
 				sprintf(
 					/* translators: %d: HTTP status */
-					__( 'Kunne ikke hente arkiv.dk (HTTP %d).', 'arkivtimeline' ),
+					__( 'Kunne ikke hente arkiv.dk (HTTP %d).', 'prix-historical-timeline' ),
 					$code
 				)
 			);
@@ -785,7 +785,7 @@ class Timeline_History_Arkiv_Client {
 	public static function fetch_detail( string $arkiv_id ) {
 		$arkiv_id = preg_replace( '/\D+/', '', $arkiv_id );
 		if ( $arkiv_id === '' ) {
-			return new WP_Error( 'th_arkiv_id', __( 'Ugyldigt arkiv-id.', 'arkivtimeline' ) );
+			return new WP_Error( 'th_arkiv_id', __( 'Ugyldigt arkiv-id.', 'prix-historical-timeline' ) );
 		}
 
 		$url = 'https://arkiv.dk/vis/' . rawurlencode( $arkiv_id );
@@ -808,7 +808,7 @@ class Timeline_History_Arkiv_Client {
 		$code = (int) wp_remote_retrieve_response_code( $response );
 		$body = (string) wp_remote_retrieve_body( $response );
 		if ( $code < 200 || $code >= 300 || $body === '' ) {
-			return new WP_Error( 'th_arkiv_detail', __( 'Kunne ikke hente registreringen på arkiv.dk.', 'arkivtimeline' ) );
+			return new WP_Error( 'th_arkiv_detail', __( 'Kunne ikke hente registreringen på arkiv.dk.', 'prix-historical-timeline' ) );
 		}
 
 		$out = array();
@@ -1007,7 +1007,7 @@ class Timeline_History_Arkiv_Client {
 	public static function import_items( array $items, string $timeline_name = '', int $max_gallery_images = 0 ) {
 		$timeline_name = sanitize_text_field( trim( $timeline_name ) );
 		if ( $timeline_name === '' ) {
-			return new WP_Error( 'th_timeline_name', __( 'Angiv et navn til tidslinjen.', 'arkivtimeline' ) );
+			return new WP_Error( 'th_timeline_name', __( 'Angiv et navn til tidslinjen.', 'prix-historical-timeline' ) );
 		}
 
 		$set = Timeline_History_Sets::ensure( $timeline_name );

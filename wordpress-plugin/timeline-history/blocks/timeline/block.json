@@ -2,11 +2,11 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "timeline-history/timeline",
-  "title": "ArkivTimeline",
+  "title": "Historical Timeline",
   "category": "widgets",
   "icon": "backup",
   "description": "Vis en tidslinje med dine historier.",
-  "textdomain": "arkivtimeline",
+  "textdomain": "prix-historical-timeline",
   "attributes": {
     "layout": {
       "type": "string",

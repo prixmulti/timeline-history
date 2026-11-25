@@ -19,8 +19,8 @@ class Timeline_History_Admin_Builder {
 	public function menu(): void {
 		add_submenu_page(
 			Timeline_History_Settings::ADMIN_MENU_SLUG,
-			__( 'Timeline Studio', 'arkivtimeline' ),
-			__( 'Studio', 'arkivtimeline' ),
+			__( 'Timeline Studio', 'prix-historical-timeline' ),
+			__( 'Studio', 'prix-historical-timeline' ),
 			'edit_posts',
 			'timeline-history-builder',
 			array( $this, 'render' )
@@ -84,7 +84,7 @@ class Timeline_History_Admin_Builder {
 						echo esc_html(
 							sprintf(
 								/* translators: 1: created, 2: updated, 3: skipped */
-								__( 'Import færdig: %1$d oprettet, %2$d opdateret, %3$d sprunget over. Tidslinjen er valgt herunder.', 'arkivtimeline' ),
+								__( 'Import færdig: %1$d oprettet, %2$d opdateret, %3$d sprunget over. Tidslinjen er valgt herunder.', 'prix-historical-timeline' ),
 								$imp_created,
 								$imp_updated,
 								$imp_skipped
@@ -96,7 +96,7 @@ class Timeline_History_Admin_Builder {
 			<?php endif; ?>
 			<div class="th-studio-header">
 				<div>
-					<h1><?php esc_html_e( 'Timeline Studio', 'arkivtimeline' ); ?></h1>
+					<h1><?php esc_html_e( 'Timeline Studio', 'prix-historical-timeline' ); ?></h1>
 				</div>
 				<div class="th-studio-gear-wrap">
 					<button
@@ -105,26 +105,26 @@ class Timeline_History_Admin_Builder {
 						id="th-studio-gear"
 						aria-expanded="false"
 						aria-controls="th-studio-popover"
-						title="<?php esc_attr_e( 'Visningsindstillinger', 'arkivtimeline' ); ?>"
+						title="<?php esc_attr_e( 'Visningsindstillinger', 'prix-historical-timeline' ); ?>"
 					>
 						<span class="dashicons dashicons-admin-generic" aria-hidden="true"></span>
-						<span class="screen-reader-text"><?php esc_html_e( 'Visning', 'arkivtimeline' ); ?></span>
+						<span class="screen-reader-text"><?php esc_html_e( 'Visning', 'prix-historical-timeline' ); ?></span>
 					</button>
-					<div class="th-studio-popover" id="th-studio-popover" role="dialog" aria-label="<?php esc_attr_e( 'Visning', 'arkivtimeline' ); ?>">
+					<div class="th-studio-popover" id="th-studio-popover" role="dialog" aria-label="<?php esc_attr_e( 'Visning', 'prix-historical-timeline' ); ?>">
 						<div id="th-studio-gear-mount"></div>
 					</div>
 				</div>
 			</div>
 
 			<?php if ( ! $asset_ok ) : ?>
-				<div class="notice notice-error"><p><?php esc_html_e( 'Mangler assets/dist/builder.js. Kør npm run pack:plugin og genupload pluginnet.', 'arkivtimeline' ); ?></p></div>
+				<div class="notice notice-error"><p><?php esc_html_e( 'Mangler assets/dist/builder.js. Kør npm run pack:plugin og genupload pluginnet.', 'prix-historical-timeline' ); ?></p></div>
 			<?php endif; ?>
 			<div
 				id="timeline-history-builder-root"
 				class="th-builder-root"
 				style="margin-top:1rem;min-height:480px;background:#fff;border:1px solid #dcdcde;border-radius:8px;"
 			>
-				<p style="padding:1.25rem;color:#646970;margin:0;"><?php esc_html_e( 'Indlæser Timeline Builder…', 'arkivtimeline' ); ?></p>
+				<p style="padding:1.25rem;color:#646970;margin:0;"><?php esc_html_e( 'Indlæser Timeline Builder…', 'prix-historical-timeline' ); ?></p>
 			</div>
 		</div>
 		<script>

@@ -1,17 +1,17 @@
-# ArkivTimeline
+# Historical Timeline
 
 WordPress-plugin til visuelle tidslinjer med import fra [arkiv.dk](https://www.arkiv.dk), redaktionelt **Studio** og visning på sider via shortcode eller Gutenberg-blok.
 
 | | |
 |---|---|
-| **WordPress.org slug** | `arkivtimeline` (efter godkendelse) |
+| **WordPress.org slug** | `prix-historical-timeline` (efter godkendelse) |
 | **Plugin-kilde** | `wordpress-plugin/timeline-history/` |
 | **Licens** | GPL-2.0-or-later |
 | **Krav** | WordPress 6.4+, PHP 7.4+ |
 
 ## Hvem står bag?
 
-**ArkivTimeline** er udviklet af **Palle Rix** ([GitHub: @prixmulti](https://github.com/prixmulti), [prix.dk](https://prix.dk)).
+**Historical Timeline** er udviklet af **Palle Rix** ([GitHub: @prixmulti](https://github.com/prixmulti), [prix.dk](https://prix.dk)).
 
 Projektet er bygget til lokalarkiver og historieforeninger, der vil vise kronologiske historier på WordPress uden at genindtaste alt materiale fra arkiv.dk.
 
@@ -21,7 +21,7 @@ Har du spørgsmål, fejl eller idéer: åbn et [issue på GitHub](https://github
 
 - Import fra arkiv.dk med forhåndsvisning, årsfilter og valg af poster
 - **Studio** med live preview, per-tidslinje visningsindstillinger og shortcode
-- Shortcode `[timeline_history]` og blokken **ArkivTimeline**
+- Shortcode `[timeline_history]` og blokken **Historical Timeline**
 - Tilpasning til aktivt WordPress-tema (farver og typografi)
 
 ## Installér plugin (produktion)
@@ -33,9 +33,7 @@ npm install
 npm run pack:plugin
 ```
 
-Upload **`dist/arkivtimeline.zip`** i wp-admin under **Plugins → Add New → Upload Plugin**, og aktiver **ArkivTimeline**.
-
-Mappen i zip hedder `arkivtimeline/` (matcher WordPress.org-slug). `pack:plugin` kører build og kan hæve patch-version i `timeline-history.php`. Brug `npm run pack:plugin -- --no-bump` eller `--version=x.y.z` efter behov.
+Upload **`dist/arkivtimeline.zip`** til WordPress.org-indsendelse (mappen i zip hedder `arkivtimeline/` indtil ny slug er reserveret). Til eget site: samme zip via **Plugins → Add New → Upload Plugin**. `pack:plugin` kører build og kan hæve patch-version i `timeline-history.php`. Brug `npm run pack:plugin -- --no-bump` eller `--version=x.y.z` efter behov.
 
 ### Når pluginet er på WordPress.org
 
@@ -49,9 +47,9 @@ Opdateringer til sites, der installerede fra **wordpress.org**, kommer via **Plu
 [timeline_history timeline="dit-tidslinje-slug"]
 ```
 
-**Gutenberg:** blokken **ArkivTimeline** (kategori Widgets).
+**Gutenberg:** blokken **Historical Timeline** (kategori Widgets).
 
-Admin: **ArkivTimeline → Import fra Arkiv.dk** og **Studio**.
+Admin: **Historical Timeline → Import fra Arkiv.dk** og **Studio**.
 
 ## Udvikling (dette repo)
 
@@ -78,13 +76,13 @@ Playground: [http://localhost:5173](http://localhost:5173) (`npm run dev`). Word
 ```
 packages/timeline-core/     # Tidslinje-UI (view)
 packages/timeline-builder/  # Studio (admin)
-wordpress-plugin/timeline-history/  # ArkivTimeline (PHP, blok, dist)
+wordpress-plugin/timeline-history/  # Historical Timeline (PHP, blok, dist)
 ```
 
 ## Links
 
 - **Kildekode:** https://github.com/prixmulti/timeline-history  
-- **WordPress-plugin (directory):** https://wordpress.org/plugins/arkivtimeline/ *(når godkendt)*
+- **WordPress-plugin (directory):** https://wordpress.org/plugins/prix-historical-timeline/ *(når godkendt)*
 
 ---
 

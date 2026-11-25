@@ -100,13 +100,13 @@ class Timeline_History_Embed_Render {
 					esc_html(
 						sprintf(
 							/* translators: %s: timeline slug */
-							__( 'Ingen historier på tidslinjen “%s”. Tjek slug i Studio / Arkiv-import, eller at historierne er publiceret.', 'arkivtimeline' ),
+							__( 'Ingen historier på tidslinjen “%s”. Tjek slug i Studio / Arkiv-import, eller at historierne er publiceret.', 'prix-historical-timeline' ),
 							$timeline
 						)
 					)
 				);
 			} else {
-				$empty_html = '<p class="th-embed__empty">' . esc_html__( 'Ingen historier at vise endnu.', 'arkivtimeline' ) . '</p>';
+				$empty_html = '<p class="th-embed__empty">' . esc_html__( 'Ingen historier at vise endnu.', 'prix-historical-timeline' ) . '</p>';
 			}
 		}
 
